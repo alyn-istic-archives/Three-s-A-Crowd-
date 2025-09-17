@@ -1,33 +1,20 @@
-2025-09-17 01:48:25 UTC
+2025-09-17 21:49:44 UTC
 Windows-11-10.0.26100-SP0
 Ren'Py 8.4.1.25072401
 
-Early init took 65 ms
-Loading error handling took 41 ms
-Loading script took 203 ms
-Loading save slot metadata took 54 ms
-Loading persistent took 1 ms
-Running init code took 98 ms
-Loading analysis data took 8 ms
-Analyze and compile ATL took 4 ms
-Reloading save slot metadata took 26 ms
-Dump and make backups took 99 ms
-Cleaning cache took 0 ms
-Making clean stores took 0 ms
-Initial gc took 83 ms
+Early init took 82 ms
+Loading error handling took 35 ms
+Loading script took 285 ms
+Loading save slot metadata took 43 ms
+Loading persistent took 0 ms
+
+File "game/script.rpy", line 188: invalid syntax
+    completion 75
+                                ^^
 DPI scale factor: 1.000000
 nvdrs: Loaded, about to disable thread optimizations.
 nvdrs: Disabled thread optimizations.
-Creating interface object took 635 ms
-Init translation took 2 ms
-Cleaning stores took 0 ms
-Load screen analysis took 41 ms
-Analyze screens took 2 ms
-Save screen analysis took 0 ms
-Save pyanalysis took 0 ms
-Save bytecode took 0 ms
-Running _start took 2 ms
-Interface start took 491 ms
+Interface start took 619 ms
 
 Initializing gl2 renderer:
 primary display bounds: (0, 0, 1920, 1080)
