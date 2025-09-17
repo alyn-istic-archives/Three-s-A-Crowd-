@@ -185,7 +185,7 @@ label campus:
                 $completion = 50
             "yeah im gonna go work on that. i'll see you in class!":
                 $realism+=2
-                $completion 75
+                $completion = 75
 
 label library:
     "trust legit library i believe"
