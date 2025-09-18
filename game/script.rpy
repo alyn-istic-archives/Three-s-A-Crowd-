@@ -3,9 +3,21 @@
 # Declare characters used by this game. The color argument colorizes the
 # name of the character.
 
-define a = Character(_("Annalisse"), color="#c8ffc8")
-define k = Character(_("Kael"), color="#c8ffc8")
+define a = Character(_("Annalisse"), color="#ec468a")
+define k = Character(_("Kael"), color="#a5c9cf")
+define Cashier = Character(("Cashier"))
+define pc = Character(color="#8760af")
 
+define k_a =0
+define k_n = 0
+
+
+# affection / nervousness stats !!
+
+define a_a =0
+define a_n =0
+
+define meet = False
 
 default ego = 0
 default poet = 0
@@ -53,7 +65,7 @@ label start:
 
 label mirror_after:
 
-    "don't forget to scribble on your id info"
+    "Don't forget to scribble on your ID info"
 
     $name = renpy.input("whats ur FIRST name")
     $pc = name.strip() or "Lyan"
@@ -64,7 +76,8 @@ label mirror_after:
     $major = renpy.input("whats ur MAJOR IN UNIVERSITY")
     $mj = major.strip() or "Psychology"
     
-    "ok so ur name is [pc] [last], right? AND you're majoring in [mj]? that'd be embarassing if not..."
+    "Ok so ur name is [pc] [last], right? AND you're majoring in [mj]? that'd be embarassing if not..."
+    
     
     menu:
         "yes":
@@ -78,10 +91,10 @@ label campus:
     with Dissolve(0.5)
     pause.5
 
-    "and with an (unfortunately) beating heart, you're off to confess. this past week has been a blur thankfully."
-    "you've met so many gorgeous people."
-    "and hot people."
-    "and pretty people."
+    "And with an (unfortunately) beating heart, you're off to confess. this past week has been a blur thankfully."
+    "You've met so many gorgeous people."
+    "And hot people."
+    "And pretty people."
     "OH AND SPEAK OF THE DEVIL!!"
 
     show a neutral at left
@@ -106,7 +119,7 @@ label campus:
     label postgreeting:
     "Annalisse looks you over slowly, eyes trailing your figure and attire. Kael, who has seemingly clammed up, has their stare trained to the ground."
     a "Someone's energetic this morning. Especially considering how you chose to leave the house… in that."
-    show k neutral at right
+    show k neutral 
     "Oooooh… and do you rise to the bait ???"
     menu:
         "I don’t want to hear that from someone who just went diving in a pink dumpster and grabbed what they could!!":
@@ -119,80 +132,259 @@ label campus:
             $ego+=2
 
     label fight: 
-        show a snark mad at left
-        a "thats a bullshit accusation and we both know it."
+        show a snark mad 
+        a "Thats a bullshit accusation and we both know it."
         "They scoff, a knowing grin on their face."
-        a "you’re lucky i’m not embarrassing you further in front of Kael. god knows they think too highly of you."
+        a "You’re lucky I’m not embarrassing you further in front of Kael. God knows they think too highly of you."
         "Kael lets out a quiet, undignified noise."
-        show k neutral at right
-        k "i don’t know what you mean!"
-        show a partial mad at left
-        a "everyone thinks too highly of you, considering {i}what{/i} you are."
-        show a snark mad at left
+        show k nervous 
+        k "I don’t know what you mean!"
+        show a partial mad 
+        a "Everyone thinks too highly of you, considering {i}what{/i} you are."
+        show a snark mad 
         "Their lip curls as your face darkens. You both know what they’re talking about, even if Kael doesn’t. The hypocrisy has you seething. But you’re more mature than Annalisse ever has been."
-        show a partial at left
+        show a partial 
         pc "Bold words, especially considering your position."
-        show a mad at left
+        show a mad 
         "She simply throws the middle finger at you before patting Kael on the shoulder."
-        show a flip mad at left
-        show k neutral at right
+        show a flip mad 
+        show k nervous 
         a "Fuck you, [last]."
         show a partial mad at left
         jump fight_end
 
     label poet_fight:
         show a partial mad 
-        a "ugh, your flowery words this morning are a pain in my ass. You’re not special, quit acting like it."
+        a "Ugh, your flowery words this morning are a pain in my ass. You’re not special, quit acting like it."
         "You sound like a fucking chuuni LOL. Kael lifts their gaze to your shoulders, offering an awkward smile."
         show k happy at right
-        k "it was… an effort! Nice try, [pc]!"
+        k "It was… an effort! Nice try, [pc]!"
         "Their diction may irk you a bit, but all the words are said genuinely and kindly… as usual."
         pc "thanks kael..."
         "There’s a lull in the conversation without you and Annalisse bickering like usual. You begin to wonder how the two of you are still friends. This whole trio is a little messed up."
         "Analisse, apparently done with the awkward silence, rolls their eyes before flipping you off."
         show a flip mad at left
-        show k neutral at right
-        a "you’re no fun today."
+        show k nervous at right
+        a "You’re no fun today."
         show a partial mad at left
 
     label fight_end:
         show a neutral at left
-        "Annalisse turns to Kael, gaze softening as Kael offers a shy smily back to them."
-        a "i'll... see you after class."
+        "Annalisse turns to Kael, gaze softening as Kael offers a shy smile back to them."
+        a "I'll... see you after class."
+        show k neutral
         "Kael stays rooted in place as Annalisse leaves, before quickly waving and stuttering out their goodbye."
         show k happy at right
         k "Bye Ann..!"
         hide a neutral
-        show k neutral at center
-        k "... sorry about Ann. You know how they are, they don’t mean it."
+        with Dissolve(0.25)
+        show k nervous at center
+        k "... Sorry about Ann. You know how they are, they don’t mean it."
         "Of course they have fucking nicknames for each other. That’s how close of friends they are. Frankly, you don’t know how they stand each other. Annalisse barely stands anyone other than Kael, and Kael can’t communicate with anyone other than Annalisse."
         "You frown. Made for each other, truly. But you had your crush, and you wouldn’t let this one-sided rivalry end your love life."
-        pc "yeah... i'm sure..."
-        "You never got why Annalisse was such a relentless... what's the word? bully? Clearly, it's not just you. The general public has always found one answer to the aggressive behaviour. Power."
+        pc "Yeah... I'm sure..."
+        "You never got why Annalisse was such a relentless... What's the word? Bully? Clearly, it's not just you. The general public has always found one answer to the aggressive behaviour. Power."
         "The exception to this very wrath?"
         "Kael."
         "Maybe it's pity for an innate shy and frail nature. Or maybe the pleading eventually got on Annalisse's good side. Somehow."
         show k neutral
-        k "well, did you finish the essay?"
+        k "Well, did you finish the essay?"
         menu:
             "Oh yeah, obviously LOL":
                 $poet+=2
                 $completion = 100
+                pc "Wanna hang out for a bit?"
+                show k happy
+                k "Sure!"
+                show k neutral
                 jump cafe
 
-            "ogh. i forgot abt that.... speedrun?":
+            "Ogh. i forgot abt that.... speedrun?":
                 $realism+=1
                 $completion = 50
-            "yeah im gonna go work on that. i'll see you in class!":
+            "Yea, I'm gonna go work on that. I'll see you in class!":
                 $realism+=2
                 $completion = 75
+                jump library
+
+label cafe:
+    k "what was your topic again for class?"
+    $topic = renpy.input("topic pending...")
+    $t = topic.strip() or "sigma ass thing" 
+    k "[t]? I'm sure you had a good time...right?"
+    pc "Yeah, it sure was... I love having research papers for my literature elective that have nothing to do with literature..."
+    show k happy
+    k "Mr. Woizo is a real special character !"
+    pc "You can js say it at this point. He teaches jackshit."
+    show k nervous
+    k "Doesn't he always say cussing isn't elevated?"
+    pc "Yeah... whatever."
+    "You get a ping from your phone..."
+    "IT'S ANNALISSE !!!!"
+    hide k nervous
+    with Dissolve(0.5)
+    show a silhouette
+    a "wyd rn"
+    menu:
+        "respond to her (MEAN)":
+            $a_a +=1
+            $k_n +=1
+            $response = "mean"
+        "RESPOND TO HER (DESPERATE)":
+            $a_a +=1
+            $a_n +=1
+            $response = "desperate"
+        "DON'T RESPOND !!!":
+            $k_a +=2
+            $a_n +=1
+            $response = "ok"
+    if response == "mean":
+        pc "and what is it to you ??? fucker ???"
+        a "ur acc so easy to rile"
+        a "its almost embarassing"
+        a "meet me in 10 minutes"
+        $meet = True
+    elif response == "desperate":
+        "in RECORD time, your fingers fly across your screen"
+        pc "NOTHING"
+        pc "what do u need me for"
+        a "..."
+        a "that was quick"
+        a "too quick"
+        a "whatever. meet me in 10, don't be late"
+        $meet = True
+    else:
+        "you close your phone."
+    hide a silhouette
+    show k nervous
+    scene bg cafe outside 
+    with Dissolve(0.5)
+    pause.25
+
+    "Kael is still prattling on about how, sometimes, Mr. Woizo does have some logic to his lectures. Before you know it, you're both outside the cafe entrance."
+    hide k happy
+
+    
+    
+    scene bg cafe inte
+    with Dissolve(0.25)
+    pause.5
+    "{i}DING DING DING !!! A CUSTYOMER IS HERE !!! DING DING DING !!! {/i}"
+    with Dissolve(0.25)
+    show k happy at left
+    "The both of you enter the cafe uneventfully. The aroma of freshly ground coffee floods your senses, accompanied with a heavy scent of powdered sugar. Mindless chattering of those sat at tables surrounds your ears."
+    k "Would you like to order first?"
+    menu:
+        "YEAH ME FIRST VRO":
+            $ego +=1
+            $k_a+=1
+        
+        "i'll go after you !":
+            $k_a +=1
+            $k_n +=1
+            $realism +=1
+            show k nervous
+            k "I'll have a... uhhh..."
+            pause.5
+            k "I'll take a caramel iced latte... with whipped cream? and two shots espresso...?"
+            show k happy
+            "Kael quickly orders his and then it's your turn to pay."
+
+    scene bg cafe cash
+    with Dissolve(0.25)
+    pause.4
+    
+    Cashier "What can i get you chat?"
+    hide k happy
+    "that's some customer service alright..."
+    $order = (renpy.input("ur order twin?")).strip() or "PEAK"
+    "You pay like an upstanding citizen before heading over to Kael."
+    scene bg cafe inte
+    "{i} BHRRIIINNGGG GHIRINNGN !!!! RHINNNGGNGN !!! {/i}"
+    show k odd
+    pause.2
+    show k nervous
+    k "Sorry !! I'm getting a call ! Do you mind picking up my order too?"
+    pc "No probl--"
+    "You're cut off as Kael shuffles to a corner."
+    menu:
+        "EAVESDROP.":
+            "U LISTEN IN"
+            $ego+=1
+            $a_n+=3
+            $k_n+=1
+            $k_a+=10
+            "you warily tiptoe behind Kael, your back flat against the wall of the corner, the chosen corridor."
+            jump ed
+        "DON'T EAVESROPD !!":
+            $realism+=1
+            $a_a+=5
+    
+    scene bg cafe inte
+    with Dissolve(0.25)
+
+    "You zone out, nothing entertaining or amusing you for the next 5-10 minutes as they prep your drink."
+    "You wonder about Annalisse. Whatever it is you've done to incur the devil's wrath, you aren't sure how to fix it."
+    "You distinctly remember getting screamed at last time you asked why, a rage-colored face accompanied with it."
+    "... and the punch that followed the next minute."
+    "Phantom pain blooms over your right cheek, a tentative hand raised to it."
+    pause.2
+    "At least you can check off being beat by a hot person from your bucket list... right? LOLL"
+    jump post_ed
+
+    label ed:
+        scene bg cafe side
+        with Dissolve(0.25)
+        pause.5
+        show k silhouette
+        "you hear... a familiar voice."
+        if meet == True:
+            hide k silhouette
+            show a silhouette
+            a "Yo, where are you? did you ditch [pc] yet? I told them to meet me now."
+            "You check the time... and sure enough, it's been 10 minutes since you messaged Annalisse."
+        else:
+            hide k silhouette
+            show a silhouette
+            a "yo where are you? did you ditch [pc] yet?"
+        hide a silhouette
+        show k silhouette
+        k "Calm down. You're too loud."
+        "... That's odd. Not Annalisse wanting to ditch you for Kael. Ugh, how are you STILL not good enough for them?"
+        "But Kael... Kael sounds different. That tone..."
+        k "No, I haven't."
+        "You just turn the corner a bit to get a glimpse of Kael's expression over their shoulder."
+        with Dissolve(0.25)
+        show k odd
+        k "Yeah, yeah, whatever. Let me have this. Alright?"
+        "Kael's voice is... dismissive of Annalisse? No. It can't be."
+        pause.2
+        k "Yeah, I know. I'm paying for it. Where? On campus. Obviously. Stop prying."
+        show k snark
+        k "You're curious today, damn. Wonder what [pc] would--"
+        "Suddenly, Annalisse's sharp voice cuts through the phone."
+        hide k snark
+        show a silhouette
+        a "I'll fucking kill you if you don't shut up now."
+        hide a silhouette
+        show k snark
+        k "well, what if I told you that--"
+
+    label post_ed:
+    $pc_upper = pc.upper()
+    Cashier "[order] ORDER FOR [pc_upper] !! CARAMEL ICED LATTE WITH WHIPPED CREAM AND TWO SHOTS ESPRESSO ORDER FOR KAEL !!" 
+    show k neutral
+    pc "Shit."
+    "You quickly sprint towards your order and Kael’s before taking a swift seat at a table."
+    
+    scene bg cafe inte
+    with Dissolve(0.25)
+    pause.4
+
+    
 
 label library:
     "trust legit library i believe"
-label cafe:
-    "oohhh ritzy cafe"
-    
-
 
 
     # Add your next story content here
