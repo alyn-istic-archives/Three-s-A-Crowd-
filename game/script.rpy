@@ -18,10 +18,12 @@ define a_a =0
 define a_n =0
 
 define meet = False
+define sneaky = False
 
 default ego = 0
 default poet = 0
 default realism = 0
+
 
 # The game starts here.
 
@@ -202,6 +204,7 @@ label campus:
             "Ogh. i forgot abt that.... speedrun?":
                 $realism+=1
                 $completion = 50
+
             "Yea, I'm gonna go work on that. I'll see you in class!":
                 $realism+=2
                 $completion = 75
@@ -263,8 +266,6 @@ label cafe:
 
     "Kael is still prattling on about how, sometimes, Mr. Woizo does have some logic to his lectures. Before you know it, you're both outside the cafe entrance."
     hide k happy
-
-    
     
     scene bg cafe inte
     with Dissolve(0.25)
@@ -336,6 +337,7 @@ label cafe:
         scene bg cafe side
         with Dissolve(0.25)
         pause.5
+        $sneaky = True
         show k silhouette
         "you hear... a familiar voice."
         if meet == True:
@@ -374,6 +376,7 @@ label cafe:
     $pc_upper = pc.upper()
     Cashier "[order] ORDER FOR [pc_upper] !! CARAMEL ICED LATTE WITH WHIPPED CREAM AND TWO SHOTS ESPRESSO ORDER FOR KAEL !!" 
     show k neutral
+    
     pc "Shit."
     "You quickly sprint towards your order and Kael’s before taking a swift seat at a table."
     
@@ -381,10 +384,91 @@ label cafe:
     with Dissolve(0.25)
     pause.4
 
+    show k neutral
+    "Kael's eyes meet yours as he slides into the seat across you, his drink steadily in front of him as your gaze raises to meet his."
+
+    if sneaky:
+        "You struggle to meet his gaze, questions filling your mind."
+        "What were they talking about? Why does he sound different?"
+        "Should you go meet Annalisse?"
+        menu:
+            "Yeah.":
+                jump library
+            "Nahhh..."
+                "Not a point to it really..."
+    
+    if completion <100:
+        k "[topic] gives you a lot to work with actually... Hm. Did you start explaining on how it's interpretated in the modern era?"
+        pc "Oh yeah. Studying. Presentation. I almost forgot that's what we came here for LOL"
+        if meet:
+            "Your phone surprisingly doesn't blow up with angry messages from Annalisse."
+            "Somehow."
+        "And despite not knowing anything about it, magically, Kael knows more of your topic than you do. It's almost irksome."
+        $completion = 150
+
+    if completion = 100:
+        k "[order], huh? That's an interesting order."
+        pc "Yeah, it's my usual. I get it everytime I go to a cafe! Is it weird?"
+        show k nervous
+        k "...Um, not at all!"
+        "...That's reassuring."
+    
+    if meet:
+        menu:
+            "See Annalisse":
+                $a_a+=2
+                $k_a-=2
+                jump library
+            "Stay with Kael":
+                $a_n+=3
+                $k_a+=1
+    "The two of you chat for the rest of your time until it's time to go to class."
+    k "Oh! Would you look at that! It's time to get to class!"
+    pc "yeah, yeah, i'm.... pumped."
+    show k happy
+    "Kael, assuming your nerves are for your presentation, tries to assuage your nerves."
+    k "You're gonna do great!"
+    pc "...or I could just skip out on it."
+    show k nervous
+    k "well... uh,,, you shouldn't !!!"
+    menu:
+        "skip that damn class...":
+            jump library
+        "tough it out goat!!":
+            pc "...I'll stick around. Let's get to class."
+            jump presentation
     
 
+
+
 label library:
-    "trust legit library i believe"
+    scene bg cafe outside 
+    with Dissolve(0.5)
+    pause.25
+    "It's a nostalgic scent, the library. That familiar scent of fres paper and ink on parchment makes you wistful."
+    "You spy a flash of pink in  your peripheral, accompanied with some muttering before Annalisse appeards in front of you."
+    show a neutral
+    a "Well, well, well."
+    if meet:
+        show a mad
+        a "You're late. Why?"
+        if sneaky:
+            menu:
+                "Tell the truth":
+                pc "I was with Kael. And then you messaged.  That's why."
+                show a partial mad
+                a "Took your damn time, that's what you did."
+                $a_a+=2
+                $k_a-=1
+                "LIE!!!":
+                pc "It took me a while to walk vro... obviously I'm gonna be a while."
+                a "Yeah sure, I don't believe that shit for a second."
+                pc "Screw you, you pinkalicious crayon."
+
+label presentation:
+    scene bg cafe outside 
+    with Dissolve(0.5)
+    pause.25
 
 
     # Add your next story content here
