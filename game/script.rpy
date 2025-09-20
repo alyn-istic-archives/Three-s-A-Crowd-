@@ -160,7 +160,7 @@ label campus:
     label poet_fight:
         show a partial mad 
         a "Ugh, your flowery words this morning are a pain in my ass. You’re not special, quit acting like it."
-        "You sound like a fucking chuuni LOL. Kael lifts their gaze to your shoulders, offering an awkward smile."
+        "You sound like a fucking tryhard LOL. Kael lifts their gaze to your shoulders, offering an awkward smile."
         show k happy at right
         k "It was… an effort! Nice try, [pc]!"
         "Their diction may irk you a bit, but all the words are said genuinely and kindly… as usual."
@@ -185,7 +185,8 @@ label campus:
 
         show k nervous at center
         k "... Sorry about Ann. You know how they are, they don’t mean it."
-        "Of course they have fucking nicknames for each other. That’s how close of friends they are. Frankly, you don’t know how they stand each other. Annalisse barely stands anyone other than Kael, and Kael can’t communicate with anyone other than Annalisse."
+        "Of course they have fucking nicknames for each other. That’s how close of friends they are. Frankly, you don’t know how they stand each other." 
+        "Annalisse barely stands anyone other than Kael, and Kael can’t communicate with anyone other than Annalisse."
         "You frown. Made for each other, truly. But you had your crush, and you wouldn’t let this one-sided rivalry end your love life."
         pc "Yeah... I'm sure..."
         "You never got why Annalisse was such a relentless... What's the word? Bully? Clearly, it's not just you. The general public has always found one answer to the aggressive behaviour. Power."
@@ -214,14 +215,14 @@ label campus:
                 jump library
 
 label cafe:
-    k "what was your topic again for class?"
+    k "What was your topic again for class?"
     $topic = renpy.input("topic pending...")
     $t = topic.strip() or "sigma ass thing" 
     k "[t]? I'm sure you had a good time...right?"
     pc "Yeah, it sure was... I love having research papers for my literature elective that have nothing to do with literature..."
     show k happy
     k "Mr. Woizo is a real special character !"
-    pc "You can js say it at this point. He teaches jackshit."
+    pc "You can just say it at this point. He teaches jackshit."
     show k nervous
     k "Doesn't he always say cussing isn't elevated?"
     pc "Yeah... whatever."
@@ -233,14 +234,15 @@ label cafe:
     a "wyd rn"
     menu:
         "respond to her (MEAN)":
-            $a_a +=1
-            $k_n +=1
+            $a_a +=2
+            $k_a +=1
             $response = "mean"
         "RESPOND TO HER (DESPERATE)":
-            $a_a +=1
+            $a_a +=3
             $a_n +=1
             $response = "desperate"
         "DON'T RESPOND !!!":
+            $realism+=3
             $k_a +=2
             $a_n +=1
             $response = "ok"
@@ -261,6 +263,9 @@ label cafe:
         $meet = True
     else:
         "you close your phone."
+        show k happy
+        pause.1
+        hide k happy
     hide a silhouette
     scene bg cafe outside 
     with Dissolve(0.5)
@@ -278,14 +283,15 @@ label cafe:
     "The both of you enter the cafe uneventfully. The aroma of freshly ground coffee floods your senses, accompanied with a heavy scent of powdered sugar. Mindless chattering of those sat at tables surrounds your ears."
     k "Would you like to order first?"
     menu:
+
         "YEAH ME FIRST VRO":
-            $ego +=1
+            $ego +=2
             $k_a+=1
         
         "i'll go after you !":
             $k_a +=1
-            $k_n +=1
-            $realism +=1
+            $k_n +=2
+            $realism +=4
             show k nervous
             k "I'll have a... uhhh..."
             pause.5
@@ -299,7 +305,7 @@ label cafe:
     
     Cashier "What can i get you chat?"
     hide k happy
-    "that's some customer service alright..."
+    "That's some customer service alright..."
     $order = (renpy.input("ur order twin?")).strip() or "PEAK"
     "You pay like an upstanding citizen before heading over to Kael."
     scene bg cafe inte
@@ -309,19 +315,21 @@ label cafe:
     show k nervous
     k "Sorry !! I'm getting a call ! Do you mind picking up my order too?"
     pc "No probl--"
+    $k_a+=1
     "You're cut off as Kael shuffles to a corner."
     menu:
         "EAVESDROP.":
             "U LISTEN IN"
-            $ego+=1
+            $ego+=2
             $a_n+=3
-            $k_n+=1
+            $k_n+=2
             $k_a+=10
-            "you warily tiptoe behind Kael, your back flat against the wall of the corner, the chosen corridor."
+            "You warily tiptoe behind Kael, your back flat against the wall of the corner, the chosen corridor."
             jump ed
         "DON'T EAVESROPD !!":
-            $realism+=1
+            $realism+=5
             $a_a+=5
+            $k_a+=1
     
     scene bg cafe inte
     with Dissolve(0.25)
@@ -341,7 +349,7 @@ label cafe:
         pause.5
         $sneaky = True
         show k silhouette
-        "you hear... a familiar voice."
+        "You hear... a familiar voice."
         if meet == True:
             hide k silhouette
             show a silhouette
@@ -366,13 +374,15 @@ label cafe:
         k "Yeah, I know. I'm paying for it. Where? On campus. Obviously. Stop prying."
         show k snark
         k "You're curious today, damn. Wonder what [pc] would--"
+        $k_a+=2
         "Suddenly, Annalisse's sharp voice cuts through the phone."
         hide k snark
         show a silhouette
         a "I'll fucking kill you if you don't shut up now."
         hide a silhouette
         show k snark
-        k "well, what if I told you that--"
+        $a_a+=3
+        k "Well, what if I told you that--"
         show k neutral
         jump post_ed
 
@@ -396,24 +406,28 @@ label cafe:
     "Kael's eyes meet yours as he slides into the seat across you, his drink steadily in front of him as your gaze raises to meet his."
 
     if sneaky:
+
         "You struggle to meet his gaze, questions filling your mind."
         "What were they talking about? Why does he sound different?"
         if meet:
             "Should you go meet Annalisse?"
             menu:
                 "Yeah.":
+                    $k_n+=3
                     jump cafe_ditch
                 "Nahhh...":
+                    $k_a+=1
                     "Not a point to it really..."
     
     if completion <100:
         scene bg cafe kael talk
-        k "[topic] gives you a lot to work with actually... Hm. Did you start explaining on how it's interpretated in the modern era?"
+        k "[t] gives you a lot to work with actually... Hm. Did you start explaining on how it's interpretated in the modern era?"
         scene bg cafe kael
         pc "Oh yeah. Studying. Presentation. I almost forgot that's what we came here for LOL"
         if meet:
             "Your phone surprisingly doesn't blow up with angry messages from Annalisse."
             "Somehow."
+            $a_n+=1
         "And despite not knowing anything about it, magically, Kael knows more of your topic than you do. It's almost irksome."
         $completion = 150
 
@@ -432,31 +446,39 @@ label cafe:
         menu:
             "See Annalisse":
                 $a_a+=2
-                $k_a-=2
+                $k_a-=4
                 jump cafe_ditch
             "Stay with Kael":
                 $a_n+=3
-                $k_a+=1
+                $k_a+=2
     scene bg cafe kael
     "The two of you chat for the rest of your time until it's time to go to class."
     scene bg cafe kael talk
     k "Oh! Would you look at that! It's time to get to class!"
     scene bg cafe kael
-    pc "yeah, yeah, i'm.... pumped."
+    pc "Yeah, yeah, I'm.... pumped."
     "Kael, assuming your nerves are for your presentation, tries to assuage your nerves."
     scene bg cafe kael talk
     k "You're gonna do great!"
-    pc "...or I could just skip out on it."
     show bg cafe kael nervous
-    pause.2
+    pc "...Or I could just skip out on it."
+    pause.1
     scene bg cafe kael talk
-    k "well... uh,,, you shouldn't !!!"
+    k "Well... Uh,,, You shouldn't !!!"
     scene bg cafe kael
     menu:
         "skip that damn class...":
+            scene bg cafe kael nervous
+            pause.2
+            scene bg cafe kael talk
+            k "Alright [pc]... I'll think of something to tell him."
+            pc "Thanks Kael. It means a lot."
+            $ego+=1
+            
             jump library
         "tough it out goat!!":
             pc "...I'll stick around. Let's get to class."
+            $realism+=2
             jump presentation
     
 label cafe_ditch:
@@ -468,26 +490,29 @@ label cafe_ditch:
     scene bg cafe kael nervous
     pc "I've got to... I have to... I have to go. Sorry."
     "A flimsy excuse. It's rather mean."
+    $k_a-=1
     scene bg cafe inte
     with Dissolve(0.25)
     pause.4
-    k "{size=-10}fuck.{/size}"
     show k odd
+    k "{size=-10}fuck.{/size}"
     pause.1
     show k nervous
     k "Bye [pc]!"
     scene bg cafe outside
+    show k odd
     k "{size=-10}fucking interloper.{/size}"
     jump library
 
 
 label library:
+
     scene bg library 
     with Dissolve(0.5)
     pause.25
-    "It's a nostalgic scent, the library. That familiar scent of fres paper and ink on parchment makes you wistful."
-    "You spy a flash of pink in  your peripheral, accompanied with some muttering before Annalisse appeards in front of you."
-    show a neutral
+    "It's a nostalgic scent, the library. That familiar scent of fresh paper and ink on parchment makes you wistful."
+    "You spy a flash of pink in your peripheral, accompanied with some muttering before Annalisse appeards in front of you."
+    show a snark
     a "Well, well, well."
     if meet:
         show a partial mad
@@ -505,11 +530,11 @@ label library:
                     a "Yeah sure, I don't believe that shit for a second."
                     show a snark
                     pc "Screw you, you pinkalicious crayon."
-        else:
-            pc "You told me to come. I came. That not good enough for you, {i}Ann{/i}?"
-            show a mad
-            a "Only Kael gets to call me that, [last]. Watch your tone."
-            pc "Bullshit."
+        
+        pc "You told me to come. I came. That not good enough for you, {i}Ann{/i}?"
+        show a mad
+        a "Only Kael gets to call me that, [last]. Watch your tone."
+        pc "Bullshit."
     else:
         a "Why're you here?"
         "You raise an eyebrow, not surprised to see Annalisse in her natural habitat. Underneath all the bite, bark, glitz and glamour, she's a high-performing scholaship student."
@@ -530,17 +555,17 @@ label library:
         show a snark
         pc "Harhar. Very funny. I chose the subject. Fuck you."
 
-    show a neutral
+    show a snark
     a "Your colorful language is so stupid. You're pathetic."
     "You roll your eyes distastefully. It seems to make her laugh."
-    show a snark
+    show a p_fluster
     pc "Pot, meet Kettle."
     show a neutral
     "They manage a small smile. The event from this morning is all but forgotten and forgiven. This is more your speed. Kael acts as both a catalyst and a barrier for Annalisse's teror. But on their own, they're both neutral people."
     show a snark
     a "Whatever. Nerd."
     "It's said almost fondly. Not as fond compared to what Kael gets. But fondly, nonetheless."
-    "It almost sitrs butterflies in your stomach."
+    "It almost stirs butterflies in your stomach."
     show a neutral
     "The sudden idea that Annalisse might like you."
     $a_a+=1
@@ -550,18 +575,21 @@ label library:
     show a fluster
     "Why would you be {i} happy {/i} about that?"
     show a neutral
+    if realism >= 5:
+        "You quickly find yourself displeased with the idea of it after mulling it over."
+
     a "[pc]. [pc]...! [pc] !!"
     show a snark
     pc "HUH--"
     a "God, you're infuriating."
-    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [a_n], ego = [ego], poet = [poet], realism = [realism]"
+    jump presentation
 
 
 label presentation:
     scene bg cafe outside 
     with Dissolve(0.5)
     pause.25
-
+    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [a_n], ego = [ego], poet = [poet], realism = [realism]"
 
     # Add your next story content here
     return
