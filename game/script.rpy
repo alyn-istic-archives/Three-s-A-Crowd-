@@ -10,6 +10,9 @@ define pc = Character(color="#8760af")
 
 define k_a =0
 define k_n = 0
+define ego = 0
+define p = 0
+define realism = 0
 
 
 # affection / nervousness stats !!
@@ -17,15 +20,18 @@ define k_n = 0
 define a_a =0
 define a_n =0
 
+
 define meet = False
 define sneaky = False
+define skipper = False
 
-default ego = 0
-default poet = 0
-default realism = 0
+default ann_aff = 0
+default kae_aff = 0
 
 
 # The game starts here.
+
+
 
 label start:
 
@@ -60,7 +66,7 @@ label start:
             "regardless... you look like yourself, and that's ogreish enough"
         
         "woeful and melancholic. the days that pass are filled of nothing but nuance.":
-            $poet+=1
+            $p+=1
             "Yes, yes, Shakespeare. We get it."
             "regardless... you look like yourself, and that's ogreish enough"
         
@@ -110,11 +116,11 @@ label campus:
             $realism +=2
 
         "Annalisse, Kael. Good to see you both? How are you this morning?":
-            $poet+=2
+            $p+=2
             $realism+=1
             
         "First thing in the morning is two gorgeous people, how blessed am I? Or the real question is how blessed are you two to see me?":
-            $poet+=1
+            $p+=1
             $ego+=2
             
 
@@ -128,9 +134,10 @@ label campus:
     menu:
         "I don’t want to hear that from someone who just went diving in a pink dumpster and grabbed what they could!!":
             $ego+=2
+            $a_a+=1
         "As marvelous as the clothes you don are, that is no excuse to claim we are not both beautiful. Our standards simply differ, and that is not something of shame.":
-            $poet+=2
-            jump poet_fight
+            $p+=2
+            jump p_fight
         "LOL 0/10 rageBAIT":
             $realism+=1
             $ego+=2
@@ -140,6 +147,7 @@ label campus:
         a "Thats a bullshit accusation and we both know it."
         "They scoff, a knowing grin on their face."
         a "You’re lucky I’m not embarrassing you further in front of Kael. God knows they think too highly of you."
+        $a_a+=1
         "Kael lets out a quiet, undignified noise."
         show k nervous 
         k "I don’t know what you mean!"
@@ -157,9 +165,10 @@ label campus:
         show a partial mad at left
         jump fight_end
 
-    label poet_fight:
+    label p_fight:
         show a partial mad 
         a "Ugh, your flowery words this morning are a pain in my ass. You’re not special, quit acting like it."
+        $a_a+=2
         "You sound like a fucking tryhard LOL. Kael lifts their gaze to your shoulders, offering an awkward smile."
         show k happy at right
         k "It was… an effort! Nice try, [pc]!"
@@ -197,9 +206,10 @@ label campus:
         k "Well, did you finish the essay?"
         menu:
             "Oh yeah, obviously LOL":
-                $poet+=2
+                $p+=2
                 $completion = 100
                 pc "Wanna hang out for a bit?"
+                $k_a+=3
                 show k happy
                 k "Sure!"
                 show k neutral
@@ -234,25 +244,27 @@ label cafe:
     a "wyd rn"
     menu:
         "respond to her (MEAN)":
-            $a_a +=2
-            $k_a +=1
+            $a_a +=3
+            $k_n +=2
             $response = "mean"
         "RESPOND TO HER (DESPERATE)":
             $a_a +=3
-            $a_n +=1
+            $k_n +=3
             $response = "desperate"
         "DON'T RESPOND !!!":
             $realism+=3
-            $k_a +=2
+            $k_a +=3
             $a_n +=1
             $response = "ok"
     if response == "mean":
         pc "and what is it to you ??? fucker ???"
+        $a_a+=1
         a "ur acc so easy to rile"
         a "its almost embarassing"
         a "meet me in 10 minutes"
         $meet = True
     elif response == "desperate":
+        $a_n+=1
         "in RECORD time, your fingers fly across your screen"
         pc "NOTHING"
         pc "what do u need me for"
@@ -263,6 +275,7 @@ label cafe:
         $meet = True
     else:
         "you close your phone."
+        $k_a+=2
         show k happy
         pause.1
         hide k happy
@@ -289,8 +302,7 @@ label cafe:
             $k_a+=1
         
         "i'll go after you !":
-            $k_a +=1
-            $k_n +=2
+            $k_n+=2
             $realism +=4
             show k nervous
             k "I'll have a... uhhh..."
@@ -354,6 +366,7 @@ label cafe:
             hide k silhouette
             show a silhouette
             a "Yo, where are you? Did you ditch [pc] yet? I told them to meet me now."
+            $a_n+=2
             "You check the time... and sure enough, it's been 10 minutes since you messaged Annalisse."
         else:
             hide k silhouette
@@ -381,7 +394,7 @@ label cafe:
         a "I'll fucking kill you if you don't shut up now."
         hide a silhouette
         show k snark
-        $a_a+=3
+        $k_a+=3
         k "Well, what if I told you that--"
         show k neutral
         jump post_ed
@@ -406,18 +419,11 @@ label cafe:
     "Kael's eyes meet yours as he slides into the seat across you, his drink steadily in front of him as your gaze raises to meet his."
 
     if sneaky:
-
+        $k_a+=2
         "You struggle to meet his gaze, questions filling your mind."
         "What were they talking about? Why does he sound different?"
-        if meet:
-            "Should you go meet Annalisse?"
-            menu:
-                "Yeah.":
-                    $k_n+=3
-                    jump cafe_ditch
-                "Nahhh...":
-                    $k_a+=1
-                    "Not a point to it really..."
+
+      
     
     if completion <100:
         scene bg cafe kael talk
@@ -427,7 +433,7 @@ label cafe:
         if meet:
             "Your phone surprisingly doesn't blow up with angry messages from Annalisse."
             "Somehow."
-            $a_n+=1
+            $a_n+=2
         "And despite not knowing anything about it, magically, Kael knows more of your topic than you do. It's almost irksome."
         $completion = 150
 
@@ -436,6 +442,7 @@ label cafe:
         k "[order], huh? That's an interesting order."
         scene bg cafe kael
         pc "Yeah, it's my usual. I get it everytime I go to a cafe! Is it weird?"
+        $k_a+=2
         scene bg cafe kael nervous 
         pause.2
         scene bg cafe kael talk
@@ -443,10 +450,11 @@ label cafe:
         "...That's reassuring."
     
     if meet:
+        "Should you go meet Annalisse?"
         menu:
             "See Annalisse":
                 $a_a+=2
-                $k_a-=4
+                $k_n+=4
                 jump cafe_ditch
             "Stay with Kael":
                 $a_n+=3
@@ -474,7 +482,7 @@ label cafe:
             k "Alright [pc]... I'll think of something to tell him."
             pc "Thanks Kael. It means a lot."
             $ego+=1
-            
+            $skipper = True
             jump library
         "tough it out goat!!":
             pc "...I'll stick around. Let's get to class."
@@ -490,7 +498,7 @@ label cafe_ditch:
     scene bg cafe kael nervous
     pc "I've got to... I have to... I have to go. Sorry."
     "A flimsy excuse. It's rather mean."
-    $k_a-=1
+    $k_n+=5
     scene bg cafe inte
     with Dissolve(0.25)
     pause.4
@@ -524,7 +532,7 @@ label library:
                     show a partial mad
                     a "Took your damn time, that's what you did."
                     $a_a+=2
-                    $k_a-=1
+                    $k_a+=1
                 "LIE!!!":
                     pc "It took me a while to walk vro... obviously I'm gonna be a while."
                     a "Yeah sure, I don't believe that shit for a second."
@@ -538,29 +546,35 @@ label library:
     else:
         a "Why're you here?"
         "You raise an eyebrow, not surprised to see Annalisse in her natural habitat. Underneath all the bite, bark, glitz and glamour, she's a high-performing scholaship student."
-        pc "I have an assignment to complete? What's it to you?"
-        a "Really now?"
-        show a snark
-        a "Let me see it."
-        "You raise an eyebrow at the demand, but hand it over cautiously."
-        $a_a+=3
-        a "not bad. I'll even help."
-        $completion+=15
-        "That's... new."
-        "Annalisse never does anything that benefits anyone else. Unless it's her. Or maybe Kael. So why's she helping you?"
-        pc "Um... Thanks?"
-        "How... graceful of you."
-        show a partial mad
-        a "Yeah, you're fucking welcome. Dumbass. Do you even know what you're talking about here?"
-        show a snark
-        pc "Harhar. Very funny. I chose the subject. Fuck you."
+        if skipper:
+            pc "I'm skipping."
+            show a neutral
+            a "Wow? Really now? That's surprising."
+            pc "I'm not like Kael, not fervently dedicated to my academics."
+        else:
+            pc "I have an assignment to complete? What's it to you?"
+            a "Really now?"
+            show a snark
+            a "Let me see it."
+            "You raise an eyebrow at the demand, but hand it over cautiously."
+            $a_a+=3
+            a "not bad. I'll even help."
+            $completion+=15
+            "That's... new."
+            "Annalisse never does anything that benefits anyone else. Unless it's her. Or maybe Kael. So why's she helping you?"
+            pc "Um... Thanks?"
+            "How... graceful of you."
+            show a partial mad
+            a "Yeah, you're fucking welcome. Dumbass. Do you even know what you're talking about here?"
+            show a snark
+            pc "Harhar. Very funny. I chose the subject. I hope both sides of your pillow are damp."
 
     show a snark
-    a "Your colorful language is so stupid. You're pathetic."
+    a "Your colorful word choice is so stupid. You're pathetic."
     "You roll your eyes distastefully. It seems to make her laugh."
-    show a p_fluster
-    pc "Pot, meet Kettle."
     show a neutral
+    pc "Pot, meet Kettle."
+    show a snark fluster
     "They manage a small smile. The event from this morning is all but forgotten and forgiven. This is more your speed. Kael acts as both a catalyst and a barrier for Annalisse's teror. But on their own, they're both neutral people."
     show a snark
     a "Whatever. Nerd."
@@ -574,22 +588,127 @@ label library:
     $a_a+=1
     show a fluster
     "Why would you be {i} happy {/i} about that?"
-    show a neutral
+    show a snark
     if realism >= 5:
         "You quickly find yourself displeased with the idea of it after mulling it over."
 
     a "[pc]. [pc]...! [pc] !!"
-    show a snark
+    show a neutral
     pc "HUH--"
+    show a snark fluster
     a "God, you're infuriating."
+    "HUHHH ??!?!!"
+    "Did you do that stupid cliche thing off saying your thoughts out loud??"
+    a "You never pay attention to anything I say. Dumbass."
+    "Annalisse glances down at the phone in their hand."
+    if sneaky!=True:
+        show a snark
+        a "I've gotta pick up a call. One sec. I'll be back."
+        menu:
+            "EAVESDROP":
+                $sneaky=True
+                "You follow Annalisse to one of the many corridors in the library, your back pressed against the bookshelves of the other aisle."
+                with Dissolve(0.25)
+                show a silhouette
+                $k_a+=2
+                $a_a+=5
+                a "What do you need? I'm with [pc] right now."
+                "You hear a familiar dulcet voice through the static of Annalisse's phone."
+                hide a silhouette
+                show k silhouette
+                k "Monopolizing their time now?"
+                if meet:
+                    k "I was with them first, _____ ______."
+                    hide k silhouette
+                    show a silhouette
+                    a "And now they're with me. God..."
+                    $k_n+=3
+                    hide a silhouette
+                    show k silhouette
+                    k "_____ _____."
+                    "You peek through the crack of the bookshelves."
+                    hide k silhouette
+                    show a snark
+                    a "You're just jealous they like me better."
+                    hide a snark
+                    show k silhouette
+                    k "Fuck you too."
+                    $k_n+=2
+                hide k silhouette
+                show a p_fluster
+                a "They look... ___ today."
+                hide a p_fluster
+                show k silhouette
+                k "Why not just tell them that? I'm so done with hearing--"
+                hide k silhouette
+                show a fluster
+                a "They're so ______. I just want to ______."
+                "You just miss the tail end of what Annalisse manages to whisper into the call before Kael's crisp voice cuts through it with an undertone of anger."
+                hide a fluster
+                show k silhouette
+                k "No. You don't get to do that. Not after--"
+                hide k silhouette
+                show a partial mad
+                a "Jesus, I get it. Whatever."
+                a "Petty of you. You don't control them."
+                hide a partial mad
+                show k silhouette
+                k "___ _____. _______."
+                hide k silhouette
+                show a mad
+                a "Damnit. Fine. Stop calling me then. Interloper."
+            "Don't eavesdrop twin,....":
+                "You stay in place like asked."
+                $a_a +=3
+                $k_a+=4
+    show a neutral
+    with Dissolve(0.25)
+    "She sits back down at the table."
+    a "It's almost time for your class. The one you have with Kael."
+    if skipper:
+        pc "That's the one I'm skipping."
+        call aff_update
+        if (ann_aff>=10):
+            show a snark
+            a "Oh. Well. I guess you can stay a while."
+            $k_n+=3
+            $a_a+=4
+            jump loiter
+        else:
+            show a partial mad
+            a "Boo hoo. Fuck off. Get to your class."
+    else:
+        show a partial mad
+        a "Get going. I need to take my nap."
+    pc "Hey, alright. I'll get going."
+    if completion < 100:
+        "You turn to her hesitantly. This is a really shit choice, in my opinion."
+        pc "...Thanks."
+        show a partial mad
+        a "Huh?"
+        "At the apparent confusion, you grit your teeth, heat coloring your face."
+        pc "Thanks. For the help with the presentation."
+        "A sharp grin covers her face, something that sends a shiver down your spine."
+        show a snark
+        a "You owe me now, kettle."
+        "It's in reference to when you called yourself kettle and Annalise pot in reference to the hypocrisy earlier. It's so stupid. And dumb. It's the worst nickname to curse this earth."
+        "But it brings this stupid, jubilant grin to your face."
+        pc "Kill yourself, pot."
+
     jump presentation
 
+label loiter:
+    jump presentation
 
 label presentation:
     scene bg cafe outside 
     with Dissolve(0.5)
     pause.25
-    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [a_n], ego = [ego], poet = [poet], realism = [realism]"
+    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
 
     # Add your next story content here
+    return
+label aff_update:
+    $ann_aff = (a_a+p)-(a_n+realism)
+    $kae_aff = (k_a+ego)-(k_n+realism)
     return
