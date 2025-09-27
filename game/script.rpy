@@ -19,6 +19,8 @@ define realism = 0
 
 define a_a =0
 define a_n =0
+define ann_aff =0
+define kae_aff =0
 
 
 define meet = False
@@ -38,7 +40,7 @@ label start:
     # Show a background. This uses a placeholder by default, but you can
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
-
+    jump loiter
     scene bg room
 
     # This shows a character sprite. A placeholder is used, but you can
@@ -158,7 +160,7 @@ label campus:
         show a partial mad
         pc "Bold words, especially considering your position."
         show a mad 
-        "She simply throws the middle finger at you before patting Kael on the shoulder."
+        "Annalisse simply throws the middle finger at you before patting Kael on the shoulder."
         show a flip mad 
         show k nervous 
         a "Fuck you, [last]."
@@ -243,11 +245,11 @@ label cafe:
     show a silhouette
     a "wyd rn"
     menu:
-        "respond to her (MEAN)":
+        "respond to annalisse (MEAN)":
             $a_a +=3
             $k_n +=2
             $response = "mean"
-        "RESPOND TO HER (DESPERATE)":
+        "RESPOND TO ANNALISSE (DESPERATE)":
             $a_a +=3
             $k_n +=3
             $response = "desperate"
@@ -309,13 +311,13 @@ label cafe:
             pause.5
             k "I'll take a caramel iced latte... with whipped cream? and two shots espresso...?"
             show k happy
-            "Kael quickly orders his and then it's your turn to pay."
+            "Kael quickly orders theirs and then it's your turn to pay."
 
     scene bg cafe cash
     with Dissolve(0.25)
     pause.4
     
-    Cashier "What can i get you chat?"
+    Cashier "What can I get you, chat?"
     hide k happy
     "That's some customer service alright..."
     $order = (renpy.input("ur order twin?")).strip() or "PEAK"
@@ -416,12 +418,12 @@ label cafe:
     pause.4
     hide k neutral
 
-    "Kael's eyes meet yours as he slides into the seat across you, his drink steadily in front of him as your gaze raises to meet his."
+    "Kael's eyes meet yours as they slide into the seat across you, the cool drink steadily in front of them as your gaze raises to meet theirs."
 
     if sneaky:
         $k_a+=2
-        "You struggle to meet his gaze, questions filling your mind."
-        "What were they talking about? Why does he sound different?"
+        "You struggle to meet their gaze, questions filling your mind."
+        "What were they talking about? Why do they sound different?"
 
       
     
@@ -545,7 +547,7 @@ label library:
         pc "Bullshit."
     else:
         a "Why're you here?"
-        "You raise an eyebrow, not surprised to see Annalisse in her natural habitat. Underneath all the bite, bark, glitz and glamour, she's a high-performing scholaship student."
+        "You raise an eyebrow, not surprised to see Annalisse in their natural habitat. Underneath all the bite, bark, glitz and glamour, Ann's a high-performing scholaship student."
         if skipper:
             pc "I'm skipping."
             show a neutral
@@ -561,7 +563,7 @@ label library:
             a "not bad. I'll even help."
             $completion+=15
             "That's... new."
-            "Annalisse never does anything that benefits anyone else. Unless it's her. Or maybe Kael. So why's she helping you?"
+            "Annalisse never does anything that benefits anyone else. Unless the person in question is themselves. Or maybe Kael. So why the help?"
             pc "Um... Thanks?"
             "How... graceful of you."
             show a partial mad
@@ -571,7 +573,7 @@ label library:
 
     show a snark
     a "Your colorful word choice is so stupid. You're pathetic."
-    "You roll your eyes distastefully. It seems to make her laugh."
+    "You roll your eyes distastefully. It seems to make them laugh."
     show a neutral
     pc "Pot, meet Kettle."
     show a snark fluster
@@ -589,7 +591,7 @@ label library:
     show a fluster
     "Why would you be {i} happy {/i} about that?"
     show a snark
-    if realism >= 5:
+    if realism >= 10:
         "You quickly find yourself displeased with the idea of it after mulling it over."
 
     a "[pc]. [pc]...! [pc] !!"
@@ -663,7 +665,7 @@ label library:
                 $k_a+=4
     show a neutral
     with Dissolve(0.25)
-    "She sits back down at the table."
+    "Annalisse settles back down at the table."
     a "It's almost time for your class. The one you have with Kael."
     if skipper:
         pc "That's the one I'm skipping."
@@ -682,22 +684,76 @@ label library:
         a "Get going. I need to take my nap."
     pc "Hey, alright. I'll get going."
     if completion < 100:
-        "You turn to her hesitantly. This is a really shit choice, in my opinion."
+        "You turn to Annalisse hesitantly. This is a really shit choice, in my opinion."
         pc "...Thanks."
         show a partial mad
         a "Huh?"
         "At the apparent confusion, you grit your teeth, heat coloring your face."
         pc "Thanks. For the help with the presentation."
-        "A sharp grin covers her face, something that sends a shiver down your spine."
+        "A sharp grin covers their face, something that sends a shiver down your spine."
         show a snark
         a "You owe me now, kettle."
         "It's in reference to when you called yourself kettle and Annalise pot in reference to the hypocrisy earlier. It's so stupid. And dumb. It's the worst nickname to curse this earth."
         "But it brings this stupid, jubilant grin to your face."
         pc "Kill yourself, pot."
+        $pot_kettle = True
 
     jump presentation
 
 label loiter:
+    
+    "You stick with Annalisse before they let down their vigilance, slumped behind a book as they begin to softly snore."
+
+    scene bg sleep a 
+    with Dissolve(0.5)
+    pause.25
+
+    "It wouldn’t be wrong to say Annalisse almost looks… approachable? Cute? Endearing?"
+    "Hm."
+    "Weird."
+    "You stay on task, hesitantly glancing up every now and then to check on Annalisse. While your phone is much more inviting than the sight before you, you can't but stare."
+    "Slouched over the plastic of the table doesn't look very comfortable."
+    menu:
+        "Cover the chair with your jacket.":
+            $a_a+=5
+            scene bg sleep a jacket
+            with Dissolve(0.5)
+            pause.25
+            $jacket = True
+        "Let Ann be. You don't want to upset them.":
+            $realism+=2
+    "It's only a moment later until Ann begins to stir, hair askew, eyes droopy."
+    if jacket:
+        scene bg awake a jacket 
+        with Dissolve(0.5)
+        pause.25
+    else:
+        scene bg awake a
+        with Dissolve(0.5)
+        pause.25
+    "It's certainly... a new look for sure."
+    "It's kind of... cute? In an ugly way???"
+    "Annalisse quickly realizes the state in which they've been caught, sending you a pointed glare."
+    if jacket:
+        scene bg awake a jacket mad
+    else:
+        scene bg awake a mad
+    a "You saw nothing."
+    jump aff_update
+    if a_aff_total>=15:
+        menu:
+            "You look cute.":
+                $a_a+=6
+            "Hmm... Really now?":
+                $a_a+=5
+            "Welcome back, Sleeping Beauty.":
+                $a_a+=8
+        if pot_kettle:
+            $nn = "pot"
+        else:
+            $nn = pc
+        a "Shut up, [nn]."
+    "It's not a moment's hesitation before they begin grabbing their stuff to leave."
     jump presentation
 
 label presentation:
@@ -708,6 +764,7 @@ label presentation:
 
     # Add your next story content here
     return
+
 label aff_update:
     $ann_aff = (a_a+p)-(a_n+realism)
     $kae_aff = (k_a+ego)-(k_n+realism)
