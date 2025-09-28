@@ -411,7 +411,8 @@ label cafe:
 
     label post_ed:
     $pc_upper = pc.upper()
-    Cashier "[order] ORDER FOR [pc_upper] !! CARAMEL ICED LATTE WITH WHIPPED CREAM AND TWO SHOTS ESPRESSO ORDER FOR KAEL !!" 
+    $order_upper = order.upper()
+    Cashier "[order_upper] ORDER FOR [pc_upper] !! CARAMEL ICED LATTE WITH WHIPPED CREAM AND TWO SHOTS ESPRESSO ORDER FOR KAEL !!" 
     
     
     pc "Shit."
@@ -463,7 +464,15 @@ label cafe:
         menu:
             "See Annalisse":
                 $a_a+=2
-                $k_n+=4
+                $k_n+=2
+                "You stand up out of the blue, Kael looks at you surprised."
+                scene bg cafe kael nervous
+                pause.4
+                scene bg cafe kael talk
+                k "[pc]?"
+                scene bg cafe kael nervous
+                pc "I've got to... I have to... I have to go. Sorry."
+                "A flimsy excuse. It's rather mean."
                 jump cafe_ditch
             "Stay with Kael":
                 $a_n+=3
@@ -499,14 +508,6 @@ label cafe:
             jump presentation
     
 label cafe_ditch:
-    "You stand up out of the blue, Kael looks at you surprised."
-    scene bg cafe kael nervous
-    pause.4
-    scene bg cafe kael talk
-    k "[pc]?"
-    scene bg cafe kael nervous
-    pc "I've got to... I have to... I have to go. Sorry."
-    "A flimsy excuse. It's rather mean."
     $k_n+=5
     scene bg cafe inte
     with Dissolve(0.25)
@@ -519,6 +520,7 @@ label cafe_ditch:
     scene bg cafe outside
     show k odd
     k "{size=-10}fucking interloper.{/size}"
+    hide k odd
     jump library
 
 
@@ -631,7 +633,6 @@ label library:
                     hide k silhouette
                     show a silhouette
                     a "And now they're with me. God..."
-                    $k_n+=3
                     hide a silhouette
                     show k silhouette
                     k "_____ _____."
@@ -666,13 +667,13 @@ label library:
                 hide k silhouette
                 show a mad
                 a "Damnit. Fine. Stop calling me then. Interloper."
+                "Annalisse settles back down at the table."
             "Don't eavesdrop twin,....":
                 "You stay in place like asked."
                 $a_a +=3
                 $k_a+=4
-    show a neutral
     with Dissolve(0.25)
-    "Annalisse settles back down at the table."
+    show a neutral
     a "It's almost time for your class. The one you have with Kael."
     if skipper:
         pc "That's the one I'm skipping."
@@ -689,6 +690,12 @@ label library:
     else:
         show a partial mad
         a "Get going. I need to take my nap."
+        if (ann_aff>=10):
+            show a snark
+            a "Actually... I guess you can stay a while."
+        
+            $a_a+=4
+            jump loiter
     pc "Hey, alright. I'll get going."
     if completion < 100:
         "You turn to Annalisse hesitantly. This is a really shit choice, in my opinion."
@@ -819,10 +826,9 @@ label confession:
             $a_n+=10
             jump route_k
         "Either of them!!":
-            $k_a-=5
-            $k_n+=5
-            $a_a-=5
-            $a_n+=5
+            if kae_aff>ann_aff or ann_aff>kae_aff:
+                $a_a-=2
+                $k_a-=2
             $realism +=5
             jump route_poly
         "NEITHER of them.":
@@ -932,7 +938,7 @@ label route_poly:
         show a silhouette
         k "sure !!"
         a "wtv i'll be there"
-        rejection = True
+        $rejection = True
     "You all collectively decide on meeting up outside the university."
     if rejection:
         jump poly_reject
