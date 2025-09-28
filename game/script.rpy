@@ -8,12 +8,15 @@ define k = Character(_("Kael"), color="#a5c9cf")
 define Cashier = Character(("Cashier"))
 define pc = Character(color="#8760af")
 
+default preferences.text_cps = 45
+default preferences.afm_enable = False
+
 define k_a =0
 define k_n = 0
 define ego = 0
 define p = 0
 define realism = 0
-
+define lecture = False
 
 # affection / nervousness stats !!
 
@@ -22,10 +25,14 @@ define a_n =0
 define ann_aff =0
 define kae_aff =0
 
-
+define pot_kettle= False
+define rejection = False
 define meet = False
 define sneaky = False
 define skipper = False
+
+define jacket = False
+define nn = "loser"
 
 default ann_aff = 0
 default kae_aff = 0
@@ -40,7 +47,8 @@ label start:
     # Show a background. This uses a placeholder by default, but you can
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
-    jump loiter
+
+    jump confession
     scene bg room
 
     # This shows a character sprite. A placeholder is used, but you can
@@ -739,8 +747,8 @@ label loiter:
     else:
         scene bg awake a mad
     a "You saw nothing."
-    jump aff_update
-    if a_aff_total>=15:
+    call aff_update
+    if ann_aff>=15:
         menu:
             "You look cute.":
                 $a_a+=6
@@ -754,18 +762,194 @@ label loiter:
             $nn = pc
         a "Shut up, [nn]."
     "It's not a moment's hesitation before they begin grabbing their stuff to leave."
-    jump presentation
-
-label presentation:
-    scene bg cafe outside 
+    scene bg library
     with Dissolve(0.5)
     pause.25
-    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
+    "You let out an almost dramatic sigh as you're left to the library by yourself."
+    jump confession
+
+label presentation:
+    scene bg lecture 
+    $lecture = True
+    with Dissolve(0.5)
+    pause.25
+    "You stare down at the grade given to you by Mr. Woizo."
+    if completion == 65 or completion ==90:
+        $a_a+=5
+        "Mr. Woizo" "Surprisingly good job. Didn't know you had it in you."
+        "Mr. Woizo." "Oddly profound for [t]."
+    if completion == 100:
+        $realism+=5
+        "Mr. Woizo" "It's definitely your work...!"
+        "Mr. Woizo" "Good job on fixing your past shortcomings though."
+    if completion> 100:
+        $k_a+=5
+        "Mr. Woizo" "This reminds me of a certain someone else's work. Hm."
+        "Mr. Woizo" "Maybe you actually started asking for help! Good job."
+
+    "You had managed your way through your presentation, other students hurriedly taking notes. Mr. Woizo said something about submitting them for extra credit but people are taking it pretty serious."
+    if skipper:
+        "You mildly regret not actually skipping the class. But Annalisse made you leave... and then Kael found you. And thought you were going to class."
+        "So now you're here."
+
+    "Honestly, how did you even get to this point..."
+
+    jump confession
 
     # Add your next story content here
     return
 
 label aff_update:
+
+    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
+
     $ann_aff = (a_a+p)-(a_n+realism)
     $kae_aff = (k_a+ego)-(k_n+realism)
+    return
+
+label confession:
+    "From what you remember, you started this day off hoping to confess..."
+    "Those capturing eyes, that infectious smile, that charming voice... Obviously you were going to confess to..."
+    menu:
+        "Annalisse <333":
+            $k_a-=10
+            $k_n+=10
+            jump route_a
+        "Kael !!":
+            $a_a-=10
+            $a_n+=10
+            jump route_k
+        "Either of them!!":
+            $k_a-=5
+            $k_n+=5
+            $a_a-=5
+            $a_n+=5
+            $realism +=5
+            jump route_poly
+        "NEITHER of them.":
+            $realism+=25
+            $a_a-=10
+            $k_a-=15
+            jump aro
+
+label route_a:
+    "You couldn't help but be enamored with Annalisse. A harsh exterior and what YOU'RE sure is a soft interior. The apparent duality enraptures you."
+    "Underneath all that gorgeous, brilliant star potential is someone sensitive, emotional, kind. Even if a little brash."
+    "But you know Annalisse cares."
+    "It's endearing."
+    "You send her a message."
+    menu:
+        "Meetup with me trust chat":
+            $realism+=2
+        "You wanna see your favorite later?":
+            $ego+=2
+        "I need to see you as soon as possible. There's something of importance we must discuss.":
+            $p+=2
+    call aff_update
+    show a silhouette
+    if ann_aff >=20:
+        a "Sure. Whatever."
+        if completion == 65 or completion == 90:
+            a "how was ur presentation"
+            pc "Good, thanks :)"
+    else:
+        a "Alright."
+        $rejection = True
+    hide a silhouette
+    if lecture and sneaky and kae_aff<=15:
+        "In your peripheral you see that weird side to Kael again."
+        "If you squint from across the room, he almost seems to be glaring at you..."
+        "That's weird..."
+        pause.25
+        "Oh well."
+    else:
+        "You get this foreboding feeling someone isn't very happy. Your ear itches."
+        "You get up from the library chair and stretch, setting off."
+    "You agreed to meet up with Annalisse at the library, not having to move since they had left a couple hours ago. Something about having to get something finished."
+    if rejection:
+        jump a_reject
+    else:
+        jump a_accept
+
+label route_k:
+    show k nervous
+    "Kael has always been a constant comfort at your side. Nullifying the effects of Annalisse's wrath, listening to our struggles, helping out where they can."
+    "They're so selfless -- to the point of self-sacrifice. You love that about them, but you would rather they not hurt themselves for you or Annalisse."
+    "There's something you can't deny about how they make you feel, eager to please, wearing their heart on their sleeve."
+    show k happy
+    "That genuine honesty warms you heart."
+    if sneaky:
+        show k odd
+        "And whatever that odd behaviour has been lately... something about it intrigues you."
+    "You send them a message."
+    menu:
+        "Meetup with me trust chat":
+            $realism+=2
+        "You wanna see your favorite later?":
+            $ego+=2
+        "I need to see you as soon as possible. There's something of importance we must discuss.":
+            $p+=2
+    call aff_update
+    show k silhouette
+    if kae_aff>=25:
+        k "of course!! what do you need?"
+        pc "just gotta talk with u, don't worry!"
+    else:
+        k "yeah sure!"
+        $rejection = True
+    hide kael silhouette
+    if not lecture and ann_aff<=15:
+        "You feel a pair of eyes trail over your figure as you're leaving the library. Let's just say they're not very comforting."
+        "When you make your way out the door, you're suddenly swarmed!"
+        "And you land flat on your face... after someone DEFINITELY TRIPS YOU."
+        "huh... weird."
+    "You agreed to meet with Kael at the cafe , so you make your way over."
+    if rejection:
+        jump k_reject
+    else:
+        jump k_accept
+label route_poly:
+    "You couldn't help but be enamored with peak."
+
+label a_accept:
+    scene bg library
+    with Dissolve(0.5)
+    pause.25
+    "Annalisse peak"
+label a_reject:
+    scene bg library
+    with Dissolve(0.5)
+    pause.25
+    "Annalisse not peak"
+
+
+label k_accept:
+    scene bg cafe outside
+    with Dissolve(0.5)
+    pause.25
+    "kael peak"
+label k_reject:
+    scene bg cafe outside
+    with Dissolve(0.5)
+    pause.25
+    "kael not peak"
+    return
+
+label aro:
+    scene bg aro
+    with Dissolve(0.5)
+    pause.25
+    "In the sunset, you see Annalisse and Kael talking. A pink-covered arm slung around a sunken shoulder."
+    "Annalisse turns to you with a grin and beckons you over."
+    scene bg aro a turn
+    a "Yo [nn]! What the hell are you doing over there so far from all the action?"
+    "Kael looks over at you from his shoulder, a sheepish grin."
+    k "Ann is right! Get over here!"
+    "You virtually bodyslam them with a wide grin on your face."
+    pc "You called?"
+    "All three of you laugh to varying degrees before shuffling apart and heading home together."
+
+    scene bg room
+    "Neutral End: You Know Which Fights To Choose"
+
     return
