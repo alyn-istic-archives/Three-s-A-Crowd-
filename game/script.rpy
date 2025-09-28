@@ -38,24 +38,12 @@ default ann_aff = 0
 default kae_aff = 0
 
 
-# The game starts here.
-
 
 
 label start:
 
-    # Show a background. This uses a placeholder by default, but you can
-    # add a file (named either "bg room.png" or "bg room.jpg") to the
-    # images directory to show it.
-
     scene bg room
 
-    # This shows a character sprite. A placeholder is used, but you can
-    # replace it by adding a file named "eileen happy.png" to the images
-    # directory.
-    #show pc happy
-
-    # These display lines of dialogue.
 
     "TODAY'S THE DAY, U ABSOLUTE LOSER !!"
     "UP AND AT EM !!"
@@ -875,7 +863,6 @@ label route_a:
         jump a_reject
     else:
         jump a_accept
-
 label route_k:
     show k nervous
     "Kael has always been a constant comfort at your side. Nullifying the effects of Annalisse's wrath, listening to our struggles, helping out where they can."
@@ -950,7 +937,89 @@ label a_accept:
     scene bg library
     with Dissolve(0.5)
     pause.25
-    "Annalisse peak"
+    "You don't really know how to go about this. You could confess over and over to the same person for eternity. And it would never change how you feel about this type of stuff."
+    "Profession of feelings."
+    " 'I like you. Go out with me.' "
+    "Like it's that easy."
+    "Like confessing is easy as breathing."
+    "Liking Annalisse is much harder than anything like that."
+    "Brash, harsh, biting -- like the wind on a cold winter morning."
+    "It's hard to love something about someone who doesn't want to be loved. But you do."
+    "You persist because everyone deserves love. It's not a matter of want, but a matter of need."
+    "You try and try again and again even if you fail, because when you love someone, you want to appreciate them."
+    "You want to cherish them and give them everything they want in life."
+    "Because that's what it means to love someone."
+    "And you might love Annalisse."
+    "You want them to wake up in the morning and be glad to see the sun. You want them to be able to have their favorite food when they want."
+    "You want to provide whatever they need, you want to talk to them every walking hour."
+    "You want to be theirs more than anything."
+    "But more importantly, you want their happiness above all."
+    pause.1
+    "And there they are."
+    show a neutral
+    a "You called?"
+    pc "You came..."
+    show a snark
+    a "When have I not? I always deliver, [nn]."
+    show a neutral
+    "You feel the grin pull at your lips, sweat dripping down the back of your neck."
+    pc "Yeah... yeah."
+    "How do you even go about this....???"
+    "How do you even know they like you -- much less tolerate you??"
+    show a partial mad
+    "Almost irritated with your silence, Annalisse frowns. Expecting better composure from you has become normalcy."
+    a "So what do you need? You don't call me up for no reason. You're not itching THAT much for a fight?"
+    pc "Well, you remember the first day we met right?"
+    show a snark
+    a "You mean like a month ago?"
+    pc "No, I mean earlier than that. Like on the bus."
+    "You pray to whatever god up there you're not embarassing yourself."
+    "That Annalisse remembers. That they know what you're talking about."
+    show a p_fluster
+    a "... you remember that?"
+    "Oh? You might have a shot with this?"
+    pc "How could I forget? How could I ever forget someone like you?"
+    show a_fluster
+    a "... Go on."
+    "It was a spring morning. You were taking the bus somewhere for your friends. It was inconsequential considering you don't even remember the details."
+    "Of course, this is an Annalisse with a different look."
+    show a past
+    "Starkly different look."
+    "Regardless, the two of you were on the bus together. Nothing new, but the bus takes a detour and immediately, you have no clue where the HELL you're headed."
+    "Reminded once again why you hate public transport."
+    "You had looked around hurriedly and confused."
+    "Annalisse caught your eye and had quickly explained that this was nothing new for the bus. Introducing themselves briefly as their gaze drawls over your figure."
+    "Enraptured in conversation with Ann, you absentmindedly miss the fact that YOU MISSED YOUR STATION."
+    "It's a few stations after that you ask Annalisse when it's your station to which you're told it passed a while back. Like a dumbass."
+    "You're quickly assured you'll be fine as Annalisse sorts out everything with you, going as far as to escort you to the next bus stop and waiting until it arrives."
+    "You're chided before the bus pulls up with a screeching halt."
+    a "Don't go around getting lost on buses anymore."
+    pc "We just met, don't make presumptions."
+    a "Whatever. See you around [pc]."
+    with Dissolve(.15)
+    show a p_fluster
+    "And you never did see them around."
+    pc "You're just as brilliant, just as kind, just as patient as you were then."
+    pc "But you're different, and that has never been a bad thing."
+    pc "No matter what people tell you now."
+    show a_fluster
+    pc "You're just as remarkable as the day I met you, just as beautiful as the day I met you."
+    "You're starting to feel embarassed as this goes on."
+    pc "You're kind, but not overtly. You know where to draw the line, even if it's too harsh for others."
+    pc "Even too harsh for me."
+    show a p_fluster
+    pc "You protect yourself. You put yourself first."
+    pc "And you always should."
+    pc "You have your priorities straight, you keep people as far and close as you need, you're smart, you're intuitive."
+    pause.2
+    show a fluster
+    pc "You're all that I want."
+    pc "So that begs the question... Do you want me too?"
+
+
+
+
+
 label a_reject:
     scene bg library
     with Dissolve(0.5)
