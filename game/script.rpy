@@ -48,7 +48,6 @@ label start:
     # add a file (named either "bg room.png" or "bg room.jpg") to the
     # images directory to show it.
 
-    jump confession
     scene bg room
 
     # This shows a character sprite. A placeholder is used, but you can
@@ -219,7 +218,7 @@ label campus:
                 $p+=2
                 $completion = 100
                 pc "Wanna hang out for a bit?"
-                $k_a+=3
+                $k_a+=5
                 show k happy
                 k "Sure!"
                 show k neutral
@@ -263,7 +262,7 @@ label cafe:
             $response = "desperate"
         "DON'T RESPOND !!!":
             $realism+=3
-            $k_a +=3
+            $k_a +=5
             $a_n +=1
             $response = "ok"
     if response == "mean":
@@ -847,7 +846,7 @@ label route_a:
             $p+=2
     call aff_update
     show a silhouette
-    if ann_aff >=20:
+    if ann_aff >=12:
         a "Sure. Whatever."
         if completion == 65 or completion == 90:
             a "how was ur presentation"
@@ -891,7 +890,7 @@ label route_k:
             $p+=2
     call aff_update
     show k silhouette
-    if kae_aff>=25:
+    if kae_aff>=12:
         k "of course!! what do you need?"
         pc "just gotta talk with u, don't worry!"
     else:
@@ -909,7 +908,37 @@ label route_k:
     else:
         jump k_accept
 label route_poly:
-    "You couldn't help but be enamored with peak."
+    "God. It's impossible to decide between the two. They're both just drop dead gorgeous in their own right."
+    show k happy at left
+    show a neutral at right
+    "The way Kael smiles, the way Annalisse grins."
+    if sneaky:
+        show k odd
+        show a fluster
+        "And that underneath whatever facade they put up, they care about you."
+    "You just CAN'T choose."
+    if realism >=10:
+        "There's definitely a part of you that feels a little awkward for being interested in both of them. But you have to confess NOW or never."
+    "You message in a group."
+    pc "Wanna hang out after school?"
+    call aff_update
+    if kae_aff>=15 and ann_aff>=15:
+        show k silhouette
+        show a silhouette
+        k "sure"
+        a "i'll be there"
+    else:
+        show k silhouette
+        show a silhouette
+        k "sure !!"
+        a "wtv i'll be there"
+        rejection = True
+    "You all collectively decide on meeting up outside the university."
+    if rejection:
+        jump poly_reject
+    else:
+        jump poly_accept
+
 
 label a_accept:
     scene bg library
@@ -934,6 +963,19 @@ label k_reject:
     pause.25
     "kael not peak"
     return
+
+label poly_accept:
+    scene bg uni
+    with Dissolve(0.5)
+    pause.25
+    "kael peak"
+label poly_reject:
+    scene bg uni
+    with Dissolve(0.5)
+    pause.25
+    "kael not peak"
+    return
+
 
 label aro:
     scene bg aro
