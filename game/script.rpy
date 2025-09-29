@@ -936,7 +936,8 @@ label route_poly:
         $rejection = True
     "You all collectively decide on meeting up outside the university."
     if rejection:
-        jump poly_reject
+        "No. You won't fuck up your friendship like this."
+        jump aro
     else:
         jump poly_accept
 
@@ -994,13 +995,25 @@ label a_accept:
     scene bg bus
     with Dissolve(.25)
     pause.25
-    show a past
+    show a past nervous
     "Starkly different look."
     "Regardless, the two of you were on the bus together. Nothing new, but the bus takes a detour and immediately, you have no clue where the HELL you're headed."
     "Reminded once again why you hate public transport."
     "You had looked around hurriedly and confused."
-    "Annalisse caught your eye and had quickly explained that this was nothing new for the bus. Introducing themselves briefly as their gaze drawls over your figure."
+    "Annalisse caught your eye."
+    show a past
+    a "Worried? The bus does this often, don't fret."
+    pc "Really? I think I'm a little more concerned... You take this route often?"
+    a "Yeah, virtually every damn day."
+    show a past sad
+    a "I'm A--"
+    pause.1
+    show a past nervous
+    a "I'm Annalisse. It's nice to meet you."
+    "They outstretch their hand to you to which you firmly grab with both before shaking it wholeheartedly."
+    pc "[pc]. Nice to meet you."
     "Enraptured in conversation with Ann, you absentmindedly miss the fact that YOU MISSED YOUR STATION."
+    show a past sad
     "It's a few stations after that you ask Annalisse when it's your station to which you're told it passed a while back. Like a dumbass."
     "You're quickly assured you'll be fine as Annalisse sorts out everything with you, going as far as to escort you to the next bus stop and waiting until it arrives."
     "You're chided before the bus pulls up with a screeching halt."
@@ -1164,35 +1177,40 @@ label k_accept:
     show k odd
     k "Hmm.."
     k "Go on."
+    scene bg alley
     "It was a winter evening. It was cold outside, you remember that frequently."
     "You had taken the usual route home from the cafe. But the lights flickering should have been a sign of sorts."
+    scene bg knife
     "Cold metal was pressed against the flesh of your neck as you froze like a deer in headlights."
     "Someone had told you to get out your wallet. And with shaking hands, you did so."
     "In the blink of an eye--"
     pause.1
     scene bg k blink1
     pause.1
-    scene bg cafe outside
+    scene bg alley
     "Someone had saved you."
     "Except you screamed. In their face."
     pc "AAGH-"
     "They quickly covered your mouth, hissing at you."
+    show k past
     k "Shut up."
     "To you, it looked more like the person who had threatened to kill you. But you sat up, and saw someone on the ground with the lights knocked out of them."
     pc "Huh."
-    show k past
+    show k past mad
     k "Huh, my ass."
     k "You're welcome."
     k "And what the hell are you doing out so late, huh?"
     pc "W-What is it to you...?"
+    show k past
     k "Look, you almost died. Cut me some slack."
     "After pilfering through your wallet, they toss it back to you."
     k "Yeah, there's like nothing of substance here."
-    "Out of condescendent (?) concern for you, Kael agrees to walk you home after the mortifying ordeal."
+    "Out of condescendening (?) concern for you, Kael agrees to walk you home after the mortifying ordeal."
     "Obviously, it's the most awkward nighttime stroll you've ever taken, but gradually your yapper nature comes through."
     "The two of you get talking before Kael yanks your arm and scribbles a number on it."
     k "There. Call me if you ever need help."
     pc "Um. Probably not."
+    show k past snark
     "They let out a boisterous laugh."
     k "Yeah, that's probably safer."
     k "See you around, [pc]."
@@ -1447,6 +1465,7 @@ label aro:
     scene bg aro a turn
     a "Yo [nn]! What the hell are you doing over there so far from all the action?"
     "Kael looks over at you from his shoulder, a sheepish grin."
+    scene bg aro k turn
     k "Ann is right! Get over here!"
     "You virtually bodyslam them with a wide grin on your face."
     pc "You called?"
