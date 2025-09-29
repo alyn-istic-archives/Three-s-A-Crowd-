@@ -991,6 +991,9 @@ label a_accept:
     a "... Go on."
     "It was a spring morning. You were taking the bus somewhere for your friends. It was inconsequential considering you don't even remember the details."
     "Of course, this is an Annalisse with a different look."
+    scene bg bus
+    with Dissolve(.25)
+    pause.25
     show a past
     "Starkly different look."
     "Regardless, the two of you were on the bus together. Nothing new, but the bus takes a detour and immediately, you have no clue where the HELL you're headed."
@@ -1004,6 +1007,7 @@ label a_accept:
     a "Don't go around getting lost on buses anymore."
     pc "We just met, don't make presumptions."
     a "Whatever. See you around [pc]."
+    scene bg library
     with Dissolve(.15)
     show a p_fluster
     "And you never did see them around."
