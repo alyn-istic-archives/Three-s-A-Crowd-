@@ -979,7 +979,7 @@ label a_accept:
     a "... you remember that?"
     "Oh? You might have a shot with this?"
     pc "How could I forget? How could I ever forget someone like you?"
-    show a_fluster
+    show a fluster
     a "... Go on."
     "It was a spring morning. You were taking the bus somewhere for your friends. It was inconsequential considering you don't even remember the details."
     "Of course, this is an Annalisse with a different look."
@@ -1002,7 +1002,7 @@ label a_accept:
     pc "You're just as brilliant, just as kind, just as patient as you were then."
     pc "But you're different, and that has never been a bad thing."
     pc "No matter what people tell you now."
-    show a_fluster
+    show a fluster
     pc "You're just as remarkable as the day I met you, just as beautiful as the day I met you."
     "You're starting to feel embarassed as this goes on."
     pc "You're kind, but not overtly. You know where to draw the line, even if it's too harsh for others."
@@ -1015,23 +1015,90 @@ label a_accept:
     show a fluster
     pc "You're all that I want."
     pc "So that begs the question... Do you want me too?"
+    show a p_fluster
+    a "I..."
+    if kae_aff <=10:
+        k "Not so fucking fast."
+        show a p_fluster at left
+        show k odd at right
+        k "Don't think for a damn second I'll let you win over Annalisse that easy."
+        scene bg k punch1
+        pause.25
+        scene bg k blink1
+        "Your nose burns."
+        pause.3
+        scene bg k punch2
+        pause.25
+        scene bg k blink2
+        "Your face itches."
+        pause.3
+        scene bg k punch3
+        pause.25
+        scene bg k blink3
+        "Your skin burns."
+        pause.3
+        scene bg k punch4
+        pause.25
+        scene bg k blink4
+        "Your heart stops."
+        pause.3
 
+        k "Nice fucking try."
+        "Bad Ending: Try to keep them amicable..."
+        return
 
-
-
+    else:
+        show a fluster
+        a "You... really want me? Even after everything. Even after it all."
+        pc "I've always."
+        show a snark fluster
+        a "Is that so?"
+        a "Lucky you then."
+        pc "Is that..."
+        "Your heart drops in your chest."
+        a "Yes, dumbass. It's a yes."
+        "Good Ending: Beauty and the Beast"
+        return
 
 label a_reject:
     scene bg library
     with Dissolve(0.5)
     pause.25
-    "Annalisse not peak"
+    "You love Annalisse."
+    "You know it as fact. They're gorgeous. A little rude, but that's part of the appeal."
+    "After all, you wouldn't pursue them if that wasn't the case, right?"
+    show a neutral
+    a "I'm here."
+    pc "Ah, great! I was wondering when you'd come."
+    show a partial mad
+    a "When do I not deliver?"
+    "You feel a little awkward at their tone."
+    show a mad
+    "Almost irritated with your silence, Annalisse frowns."
+    a "So what do you need? You don't call me up for no reason. Are you seriously itching THAT much for a fight?"
+    pc "I like you."
+    show a partial mad
+    a "So what?"
+    "HUH?"
+    a "You're not fucking slick, [pc]."
+    "Oh..."
+    show a snark
+    a "It's almost embarassing..."
+    a "Whatever, just don't bother me with this nonsense again."
+    pause.2
+    show a flip mad
+    a "Keep that shit to yourself."
+    with Dissolve(0.25)
+    hide a flip mad
+    "Bad Ending: Rejection is a Cruel Mistress... and Their Name is Annalisse."
+    
 
 
 label k_accept:
     scene bg cafe outside
     with Dissolve(0.5)
     pause.25
-    "kael peak"
+    
 label k_reject:
     scene bg cafe outside
     with Dissolve(0.5)
