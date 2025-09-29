@@ -11,10 +11,16 @@ define pc = Character(color="#8760af")
 default preferences.text_cps = 45
 default preferences.afm_enable = False
 
+init python:
+    persistent.confessions = 0
+    persistent.last_confess = []
+    persistent.endings = []
+
 define k_a =0
 define k_n = 0
 define ego = 0
 define p = 0
+define completion = 0
 define realism = 0
 define lecture = False
 
@@ -42,6 +48,10 @@ default kae_aff = 0
 
 label start:
 
+    "[persistent.last_confess]"
+    "[persistent.confessions]"
+
+    jump confession
     scene bg room
 
 
@@ -793,13 +803,6 @@ label presentation:
     # Add your next story content here
     return
 
-label aff_update:
-
-    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
-
-    $ann_aff = (a_a+p)-(a_n+realism)
-    $kae_aff = (k_a+ego)-(k_n+realism)
-    return
 
 label confession:
     "From what you remember, you started this day off hoping to confess..."
@@ -813,7 +816,7 @@ label confession:
             $a_a-=10
             $a_n+=10
             jump route_k
-        "Either of them!!":
+        "Either of them!!" if persistent.confessions == 2 :
             if kae_aff>ann_aff or ann_aff>kae_aff:
                 $a_a-=2
                 $k_a-=2
@@ -824,6 +827,11 @@ label confession:
             $a_a-=10
             $k_a-=15
             jump aro
+        "Full Completion" if len(persistent.endings) == 10:
+            "Congrats ?? you must be a massive loser if you keep playing holy,"
+            "Gold star for you!! You get to see the beta sprite of kael"
+            show k beta
+            $persistent.endings.append("locked in")
 
 label route_a:
     "You couldn't help but be enamored with Annalisse. A harsh exterior and what YOU'RE sure is a soft interior. The apparent duality enraptures you."
@@ -840,7 +848,7 @@ label route_a:
             $p+=2
     call aff_update
     show a silhouette
-    if ann_aff >=12:
+    if ann_aff > 12:
         a "Sure. Whatever."
         if completion == 65 or completion == 90:
             a "how was ur presentation"
@@ -889,7 +897,7 @@ label route_k:
     else:
         k "yeah sure!"
         $rejection = True
-    hide kael silhouette
+    hide k silhouette
     if not lecture and ann_aff<=15:
         "You feel a pair of eyes trail over your figure as you're leaving the library. Let's just say they're not very comforting."
         "When you make your way out the door, you're suddenly swarmed!"
@@ -915,7 +923,7 @@ label route_poly:
     "You message in a group."
     pc "Wanna hang out after school?"
     call aff_update
-    if kae_aff>=15 and ann_aff>=15:
+    if kae_aff>=15 and ann_aff>=15 and persistent.confessions == 2:
         show k silhouette
         show a silhouette
         k "sure"
@@ -952,8 +960,8 @@ label a_accept:
     "And you might love Annalisse."
     "You want them to wake up in the morning and be glad to see the sun. You want them to be able to have their favorite food when they want."
     "You want to provide whatever they need, you want to talk to them every walking hour."
-    "You want to be theirs more than anything."
-    "But more importantly, you want their happiness above all."
+    "You want to be theirs so bad."
+    "But at the end, you want their happiness above all."
     pause.1
     "And there they are."
     show a neutral
@@ -1044,7 +1052,11 @@ label a_accept:
         pause.3
 
         k "Nice fucking try."
-        "Bad Ending: Try to keep them amicable..."
+        "Bad Ending 1: Try to keep them amicable..."
+        if "Jumped by Dog" not in persistent.endings:
+            $persistent.endings.append("Jumped by Dog")
+        if "Jumped by Dog" not in persistent.last_confess:
+            $persistent.last_confess.append("Jumped by Dog")
         return
 
     else:
@@ -1057,9 +1069,13 @@ label a_accept:
         pc "Is that..."
         "Your heart drops in your chest."
         a "Yes, dumbass. It's a yes."
-        "Good Ending: Beauty and the Beast"
+        "Good Ending 1: Beauty and the Beast"
+        if "Beauty and the Beast" not in persistent.endings:
+            $persistent.endings.append("Beauty and the Beast")
+        if "Beauty and the Beast" not in persistent.last_confess:
+            $persistent.last_confess.append("Beauty and the Beast")
+            $persistent.confessions+=1
         return
-
 label a_reject:
     scene bg library
     with Dissolve(0.5)
@@ -1090,27 +1106,326 @@ label a_reject:
     a "Keep that shit to yourself."
     with Dissolve(0.25)
     hide a flip mad
-    "Bad Ending: Rejection is a Cruel Mistress... and Their Name is Annalisse."
-    
-
+    "Bad Ending 2: Rejection is a Cruel Mistress... and Their Name is Annalisse."
+    if "Cruel Mistress" not in persistent.last_confess:
+        $persistent.last_confess.append("Cruel Mistress")
+    if "Cruel Mistress" not in persistent.endings:
+        $persistent.endings.append("Cruel Mistress")
 
 label k_accept:
     scene bg cafe outside
     with Dissolve(0.5)
     pause.25
-    
+    "Just thinking about this makes you nauseous. You're not great with words -- not in the way Kael deserves."
+    "Not like Kael."
+    "How do you even say this in a way that they'll understand. In a way they'll reciprocate."
+    "Not that that's the only important part."
+    "You just..."
+    "You really want this."
+    "You want to support them, you want to comfort them, you want to fuel them."
+    "You want to be what they think of in the morning, and what they think of before sleep."
+    "That's what loving someone is."
+    "That's what it's always meant to you."
+    "To help someone grow, to grow with someone."
+    "And you might love Kael."
+    "You want to be theirs, every hour, every day."
+    "But their happiness is what you want above all."
+    pause.1
+    "And there they are."
+    show k nervous
+    k "Hi?"
+    pc "It's uh, good to see you."
+    show k happy
+    k "Thanks. It's good to see you too."
+    "You love that crooked smile. Those sweet eyebrws."
+    k "Let's go inside?"
+    pc "Sure... sure."
+    scene bg cafe inte
+    show k nervous
+    k "So why'd you call me? You do have Ann's number, yeah?"
+    pc "Well, you remember our first meeting, right?"
+    pause.2
+    show k odd
+    pause.2
+    show k nervous
+    k "Y-Yeah? You mean in class?"
+    pc "No, no. I mean earlier than that."
+    pause.2
+    show k odd
+    pause.2
+    show k nervous
+    k "You remember that...?"
+    "Oh...??? That's weird. They're characteristically nervous."
+    pc "Yeah."
+    show k odd
+    k "Hmm.."
+    k "Go on."
+    "It was a winter evening. It was cold outside, you remember that frequently."
+    "You had taken the usual route home from the cafe. But the lights flickering should have been a sign of sorts."
+    "Cold metal was pressed against the flesh of your neck as you froze like a deer in headlights."
+    "Someone had told you to get out your wallet. And with shaking hands, you did so."
+    "In the blink of an eye--"
+    pause.1
+    scene bg k blink1
+    pause.1
+    scene bg cafe outside
+    "Someone had saved you."
+    "Except you screamed. In their face."
+    pc "AAGH-"
+    "They quickly covered your mouth, hissing at you."
+    k "Shut up."
+    "To you, it looked more like the person who had threatened to kill you. But you sat up, and saw someone on the ground with the lights knocked out of them."
+    pc "Huh."
+    show k past
+    k "Huh, my ass."
+    k "You're welcome."
+    k "And what the hell are you doing out so late, huh?"
+    pc "W-What is it to you...?"
+    k "Look, you almost died. Cut me some slack."
+    "After pilfering through your wallet, they toss it back to you."
+    k "Yeah, there's like nothing of substance here."
+    "Out of condescendent (?) concern for you, Kael agrees to walk you home after the mortifying ordeal."
+    "Obviously, it's the most awkward nighttime stroll you've ever taken, but gradually your yapper nature comes through."
+    "The two of you get talking before Kael yanks your arm and scribbles a number on it."
+    k "There. Call me if you ever need help."
+    pc "Um. Probably not."
+    "They let out a boisterous laugh."
+    k "Yeah, that's probably safer."
+    k "See you around, [pc]."
+    with Dissolve(.15)
+    show k nervous
+    pc "I never did see you around again."
+    k "...you wanted to?"
+    pc "I mean, yeah. I wanted to thank you. Wanted to tell you that I appreciated you saving my life."
+    pc "I wanted to tell you that you were gorgeous."
+    pc "That you were cool."
+    show k neutral fluster
+    pc "I wanted to tell you whatever you wanted to hear."
+    pc "I wanted... I think I wanted to just talk with you."
+    show k nervous
+    k "Really? Talk to... {i} that {/i} Kael?"
+    pc "Yeah. And you're different now. And that's not bad."
+    pc "Not at all."
+    pc "I like you the same, want you the same."
+    pc "But do you... er... want me too?"
+    if ann_aff <= 10:
+        a "Wow."
+        show k nervous at left
+        show a partial mad at right
+        a "You think that pithy bullshit is good enough for Kael?"
+        "You frown, eyes narrowing at Annalisse's sudden appearance."
+        pc "Annali--"
+        show a mad
+        a "No. Continue."
+        a "Continue spouting that fucking drivel at Kael. How you love them {i}sooo{/i} much."
+        show a snark
+        a "You'd never compare. You're just not good enough."
+        "Your eyes burn at the vitriol."
+        "Furious, you throw the first punch."
+        pause.1
+        "But to your surprise, it's not Annalisse who catches it. But Kael."
+        show k odd
+        k "Hm. I guess this never would have worked out."
+        scene bg k punch1
+        pause.2
+        scene bg k blink3
+        k "You don't get to touch Annalisse."
+        "Bad Ending 3: Bite the Hand That Feeds."
+        if "Hand Biter" not in persistent.last_confess:
+            $persistent.last_confess.append("Hand Biter")
+        if "Hand Biter" not in persistent.endings:
+            $persistent.endings.append("Hand Biter")
+        
+        return
+    else:
+        show k odd
+        k "Annalisse told me you'd do this."
+        k "That you'd... confess."
+        k "And that it was inevitable."
+        show k nervous
+        k "She's always right."
+        show k odd
+        k "It's been a while since I've been honest."
+        k "Can you find it in yourself to love me? Even if I told you I'm a violent monster?"
+        k "Even if I'd beat you into the dirt for touching Annalisse?"
+        k "Can you love that?"
+        show k delirious
+        k "Can you even tolerate that?"
+        menu:
+            "Yes.":
+                pc "I don't just love the Kael you show. I love more than that of you."
+                show k shock
+                k "Huh?"
+                pc "I can accept that."
+                pc "Can you?"
+                show k shock fluster
+                k "HUH???"
+                k "Is... is that a yes?"
+                pc "It's always been?!"
+                "Good Ending 2: Red Riding Hood and the Wolf; You're Red."
+                if "Red Riding Hood" not in persistent.endings:
+                    $persistent.endings.append("Red Riding Hood")
+                if "Red Riding Hood" not in persistent.last_confess:
+                    $persistent.last_confess.append("Red Riding Hood")
+                    $persistent.confessions+=1
+                return
+            "No":
+                show k odd 
+                k "I guess this is where we part."
+                scene bg k punch1
+                pause.25
+                scene bg k blink1
+                "Your nose burns."
+                pause.3
+                scene bg k punch2
+                pause.25
+                scene bg k blink2
+                "Your face itches."
+                pause.3
+                scene bg k punch3
+                pause.25
+                scene bg k blink3
+                "Your skin burns."
+                pause.3
+                scene bg k punch4
+                pause.25
+                scene bg k blink4
+                "Your heart stops."
+                pause.3
+                k "I can't risk getting caught."
+                "Bad Ending 4: Through Life or Death"
+                if "Life and Death" not in persistent.last_confess:
+                    $persistent.last_confess.append("Life and Death")
+                if "Life and Death" not in persistent.endings:
+                    $persistent.endings.append("Life and Death")
+                return
 label k_reject:
     scene bg cafe outside
     with Dissolve(0.5)
     pause.25
-    "kael not peak"
+    "You love Kael. Easy as that."
+    "Obviously, their sacrificial nature is a bit of a pain. But their meekness is endearing."
+    "After all, that's why you're pursuing them."
+    "You don't really remember when you started liking them, it was some day in class, you're sure."
+    show k neutral
+    k "Hey, what'd you need me for?"
+    pc "Ah, I was wondering when you'd get here."
+    scene bg cafe inte
+    with Dissolve(.25)
+    show k nervous
+    k "I'm not late, am I?"
+    pc "No, no, not at all."
+    show k neutral
+    pc "I just wanted to tell you... I like you."
+    show k shock
+    pause.1
+    show k odd
+    pause.2
+    show k nervous
+    k "oh."
+    "{i} OH????? {/i}"
+    k "I don't... feel the same way. Sorry [pc]."
+    "They awkwardly leave, with little fanfare."
+    "Bad Ending 5: Ouch."
+    if "Ouch" not in persistent.last_confess:
+        $persistent.last_confess.append("Ouch")
+    if "Ouch" not in persistent.endings:
+        $persistent.endings.append("Ouch")
     return
 
 label poly_accept:
     scene bg uni
     with Dissolve(0.5)
     pause.25
-    "kael peak"
+    "Well this is most definitely going to be really awkward."
+    "Firstly, you have to confess to two gorgeous people."
+    "Then propose a polyamorous relationship. With these two people."
+    "Who for all you know, could like each other better. Ohhh, it's so over."
+    "They're just both so important to you. Having been a part of your life from before your university run-ins."
+    show a neutral at left
+    show k neutral at right
+    pause.3
+    show a past
+    show k past
+    pause.3
+    show a neutral
+    show k neutral
+    "How could you choose between the two of them when they're undeniably interconnected in your day-to-day life?"
+    hide a neutral
+    hide k neutral
+    show a snark
+    a "Yo."
+    "AHRGHHGHG THERE SHE IS !! THGE ONE THE ONLY ANNALISSE !!!"
+    show a partial mad
+    a "...are you ok?"
+    "SO KIND MY SHAYLA !!"
+    pc "Yeah, yeah, I'm good. I'm good."
+    "YOU ARE NOT GOOD !!!!"
+    "YOUR HEART IS [[RACING]!! YOUR BLOOD IS [[PUMPING] HOLY SHIT GET OUT OF HERE,,, GHRGG"
+    show a p_fluster
+    a "Uh... sure. When's Kael getting here?"
+    "As if on cue, Kael stumbles in the clearing from behind you."
+    hide a p_fluster
+    show a neutral at left
+    show k nervous at right
+    k "I'm not late or anything, am I?"
+    "OH MY GOD HE'S SUCH A [[CUTIE PATOOTIE]] I LOVE HIM SM MY SHAYLA...."
+    "*cough cough* Anyways."
+    pc "So. There's a reason I brought you both here."
+    pc "I, uh, I've been thinking about us. Like, all three of us."
+    show a snark
+    a "Wow. [pc]? [nn]? Thinking? Unheard of."
+    pc "Let me finish, goddamn..."
+    "You can hear Annalisse snickering as Kael nudges them to shut up."
+    pc "As I was saying. I care about both of you, like a lot. Like romantically."
+    show k shock
+    show a p_fluster
+    pc "You two are my favorite people. Like. Ever. At all."
+    show k neutral fluster
+    pc "And I think you'll always be special to me."
+    pc "Even if you two don't remember, I remember."
+    "You turn to Annalisse."
+    show a fluster
+    pc "The bus."
+    "You turn to Kael."
+    show k shock fluster
+    pc "The alleyway."
+    pc "This might be out of nowhere, but I can't keep pretending like you guys don't mean a lot to me."
+    pc "Not after everything."
+    pause.5
+    "So... Is it hot out here? Or is that just you???"
+    show a snark fluster
+    "Annalisse elbows Kael harshly to which they let out a whine."
+    show k delirious
+    k "What the--"
+    show a fluster
+    a "Are you gonna tell them?"
+    show k shock
+    pause.1
+    show k shock fluster
+    pause.2
+    show k snark
+    k "Of course. Why wouldn't I?"
+    "Annalisse rolls their eyes at the sharp turn in conversation."
+    a "Get to it."
+    show k odd fluster
+    k "We -- and I mean WE -- like you too [pc]."
+    show a snark fluster
+    a "You're incredibly blind."
+    k "And we also remember those incidents."
+    show a snark
+    a "What do you think we talk about on our own?"
+    pc "WHAT THE FUCK--"
+    "Good Ending 3: Bag the Baddies"
+    if "Bag the Baddies" not in persistent.last_confess:
+        $persistent.last_confess.append("Bag the Baddies")
+    if "Bag the Baddies" not in persistent.endings:
+        $persistent.endings.append("Bag the Baddies")
+    
+    return
+
+    
+
 label poly_reject:
     scene bg uni
     with Dissolve(0.5)
@@ -1134,6 +1449,20 @@ label aro:
     "All three of you laugh to varying degrees before shuffling apart and heading home together."
 
     scene bg room
-    "Neutral End: You Know Which Fights To Choose"
+    "Neutral Ending 0: You Know Which Fights To Choose"
+    if "Solo" not in persistent.last_confess:
+        $persistent.last_confess.append("Solo")
+    if "Solo" not in persistent.endings:
+        $persistent.endings.append("Solo")
+
+    return
+
+label aff_update:
+
+
+    $ann_aff = 500 #(a_a+p)-(a_n+realism)
+    $kae_aff = 500 #(k_a+ego)-(k_n+realism)
+
+    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
 
     return
