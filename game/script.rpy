@@ -677,7 +677,7 @@ label library:
     a "It's almost time for your class. The one you have with Kael."
     if skipper:
         pc "That's the one I'm skipping."
-        call aff_update
+        call aff_update from _call_aff_update
         if (ann_aff>=10):
             show a snark
             a "Oh. Well. I guess you can stay a while."
@@ -753,7 +753,7 @@ label loiter:
     else:
         scene bg awake a mad
     a "You saw nothing."
-    call aff_update
+    call aff_update from _call_aff_update_1
     if ann_aff>=5:
         menu:
             "You look cute.":
@@ -842,7 +842,7 @@ label route_a:
             $ego+=2
         "I need to see you as soon as possible. There's something of importance we must discuss.":
             $p+=2
-    call aff_update
+    call aff_update from _call_aff_update_2
     show a silhouette
     if ann_aff >= 12:
         a "Sure. Whatever."
@@ -885,7 +885,7 @@ label route_k:
             $ego+=2
         "I need to see you as soon as possible. There's something of importance we must discuss.":
             $p+=2
-    call aff_update
+    call aff_update from _call_aff_update_3
     show k silhouette
     if kae_aff>=12:
         k "of course!! what do you need?"
@@ -918,7 +918,7 @@ label route_poly:
         "There's definitely a part of you that feels a little awkward for being interested in both of them. But you have to confess NOW or never."
     "You message in a group."
     pc "Wanna hang out after school?"
-    call aff_update
+    call aff_update from _call_aff_update_4
     if kae_aff>=12 and ann_aff>=12:
         show k silhouette
         show a silhouette
