@@ -38,7 +38,7 @@ define sneaky = False
 define skipper = False
 
 define jacket = False
-define nn = "loser"
+define nn = "Loser"
 
 default ann_aff = 0
 default kae_aff = 0
@@ -51,7 +51,6 @@ label start:
     "[persistent.last_confess]"
     "[persistent.confessions]"
 
-    jump confession
     scene bg room
 
 
@@ -256,7 +255,7 @@ label cafe:
             $response = "mean"
         "RESPOND TO ANNALISSE (DESPERATE)":
             $a_a +=3
-            $k_n +=3
+            $k_n +=2
             $response = "desperate"
         "DON'T RESPOND !!!":
             $realism+=3
@@ -283,6 +282,7 @@ label cafe:
     else:
         "you close your phone."
         $k_a+=2
+        hide a silhouette
         show k happy
         pause.1
         hide k happy
@@ -306,7 +306,7 @@ label cafe:
 
         "YEAH ME FIRST VRO":
             $ego +=2
-            $k_a+=1
+            $k_a+=2
         
         "i'll go after you !":
             $k_n+=2
@@ -348,7 +348,7 @@ label cafe:
         "DON'T EAVESROPD !!":
             $realism+=5
             $a_a+=5
-            $k_a+=1
+            $k_a+=3
     
     scene bg cafe inte
     with Dissolve(0.25)
@@ -394,7 +394,7 @@ label cafe:
         k "Yeah, I know. I'm paying for it. Where? On campus. Obviously. Stop prying."
         show k snark
         k "You're curious today, damn. Wonder what [pc] would--"
-        $k_a+=2
+        $k_a+=3
         "Suddenly, Annalisse's sharp voice cuts through the phone."
         hide k snark
         show a silhouette
@@ -474,7 +474,7 @@ label cafe:
                 jump cafe_ditch
             "Stay with Kael":
                 $a_n+=3
-                $k_a+=2
+                $k_a+=5
     scene bg cafe kael
     "The two of you chat for the rest of your time until it's time to go to class."
     scene bg cafe kael talk
@@ -541,7 +541,7 @@ label library:
                     show a partial mad
                     a "Took your damn time, that's what you did."
                     $a_a+=2
-                    $k_a+=1
+                    $k_a+=4
                 "LIE!!!":
                     pc "It took me a while to walk vro... obviously I'm gonna be a while."
                     a "Yeah sure, I don't believe that shit for a second."
@@ -619,8 +619,8 @@ label library:
                 "You follow Annalisse to one of the many corridors in the library, your back pressed against the bookshelves of the other aisle."
                 with Dissolve(0.25)
                 show a silhouette
-                $k_a+=2
-                $a_a+=5
+                $k_a+=5
+                $a_a+=2
                 a "What do you need? I'm with [pc] right now."
                 "You hear a familiar dulcet voice through the static of Annalisse's phone."
                 hide a silhouette
@@ -669,7 +669,7 @@ label library:
             "Don't eavesdrop twin,....":
                 "You stay in place like asked."
                 $a_a +=3
-                $k_a+=4
+                $k_a+=5
     with Dissolve(0.25)
     show a neutral
     a "It's almost time for your class. The one you have with Kael."
@@ -809,23 +809,19 @@ label confession:
     "Those capturing eyes, that infectious smile, that charming voice... Obviously you were going to confess to..."
     menu:
         "Annalisse <333":
-            $k_a-=10
-            $k_n+=10
+            $k_a-=5
             jump route_a
         "Kael !!":
-            $a_a-=10
-            $a_n+=10
+            $a_a-=5
             jump route_k
         "Either of them!!" if persistent.confessions == 2 :
             if kae_aff>ann_aff or ann_aff>kae_aff:
-                $a_a-=2
-                $k_a-=2
+                $a_a-=1
+                $k_a-=1
             $realism +=5
             jump route_poly
         "NEITHER of them.":
             $realism+=25
-            $a_a-=10
-            $k_a-=15
             jump aro
         "Full Completion" if len(persistent.endings) == 10:
             "Congrats ?? you must be a massive loser if you keep playing holy,"
@@ -848,7 +844,7 @@ label route_a:
             $p+=2
     call aff_update
     show a silhouette
-    if ann_aff > 12:
+    if ann_aff >= 10:
         a "Sure. Whatever."
         if completion == 65 or completion == 90:
             a "how was ur presentation"
@@ -857,7 +853,7 @@ label route_a:
         a "Alright."
         $rejection = True
     hide a silhouette
-    if lecture and sneaky and kae_aff<=15:
+    if lecture and sneaky and kae_aff<=5:
         "In your peripheral you see that weird side to Kael again."
         "If you squint from across the room, he almost seems to be glaring at you..."
         "That's weird..."
@@ -891,14 +887,14 @@ label route_k:
             $p+=2
     call aff_update
     show k silhouette
-    if kae_aff>=12:
+    if kae_aff>=10:
         k "of course!! what do you need?"
         pc "just gotta talk with u, don't worry!"
     else:
         k "yeah sure!"
         $rejection = True
     hide k silhouette
-    if not lecture and ann_aff<=15:
+    if not lecture and ann_aff<=5:
         "You feel a pair of eyes trail over your figure as you're leaving the library. Let's just say they're not very comforting."
         "When you make your way out the door, you're suddenly swarmed!"
         "And you land flat on your face... after someone DEFINITELY TRIPS YOU."
@@ -923,7 +919,7 @@ label route_poly:
     "You message in a group."
     pc "Wanna hang out after school?"
     call aff_update
-    if kae_aff>=15 and ann_aff>=15 and persistent.confessions == 2:
+    if kae_aff>=7 and ann_aff>=7:
         show k silhouette
         show a silhouette
         k "sure"
@@ -1042,7 +1038,7 @@ label a_accept:
     pc "So that begs the question... Do you want me too?"
     show a p_fluster
     a "I..."
-    if kae_aff <=10:
+    if kae_aff <=5:
         k "Not so fucking fast."
         show a p_fluster at left
         show k odd at right
@@ -1055,7 +1051,7 @@ label a_accept:
         scene bg k punch2
         pause.25
         scene bg k blink2
-        "Your face itches."
+        "Your face stings."
         pause.3
         scene bg k punch3
         pause.25
@@ -1069,7 +1065,7 @@ label a_accept:
         pause.3
 
         k "Nice fucking try."
-        "Bad Ending 1: Try to keep them amicable..."
+        "Bad Ending 1: Jumped by Guard"
         if "Jumped by Dog" not in persistent.endings:
             $persistent.endings.append("Jumped by Dog")
         if "Jumped by Dog" not in persistent.last_confess:
@@ -1086,6 +1082,7 @@ label a_accept:
         pc "Is that..."
         "Your heart drops in your chest."
         a "Yes, dumbass. It's a yes."
+        scene annalisse ending
         "Good Ending 1: Beauty and the Beast"
         if "Beauty and the Beast" not in persistent.endings:
             $persistent.endings.append("Beauty and the Beast")
@@ -1117,6 +1114,7 @@ label a_reject:
     "Oh..."
     show a snark
     a "It's almost embarassing..."
+    show a partial mad
     a "Whatever, just don't bother me with this nonsense again."
     pause.2
     show a flip mad
@@ -1128,6 +1126,7 @@ label a_reject:
         $persistent.last_confess.append("Cruel Mistress")
     if "Cruel Mistress" not in persistent.endings:
         $persistent.endings.append("Cruel Mistress")
+    return
 
 label k_accept:
     scene bg cafe outside
@@ -1215,6 +1214,7 @@ label k_accept:
     k "Yeah, that's probably safer."
     k "See you around, [pc]."
     with Dissolve(.15)
+    scene bg cafe inte
     show k nervous
     pc "I never did see you around again."
     k "...you wanted to?"
@@ -1230,7 +1230,7 @@ label k_accept:
     pc "Not at all."
     pc "I like you the same, want you the same."
     pc "But do you... er... want me too?"
-    if ann_aff <= 10:
+    if ann_aff <= 5:
         a "Wow."
         show k nervous at left
         show a partial mad at right
@@ -1249,7 +1249,7 @@ label k_accept:
         show k odd
         k "Hm. I guess this never would have worked out."
         scene bg k punch1
-        pause.2
+        pause.175
         scene bg k blink3
         k "You don't get to touch Annalisse."
         "Bad Ending 3: Bite the Hand That Feeds."
@@ -1483,8 +1483,8 @@ label aro:
 label aff_update:
 
 
-    $ann_aff = 500 #(a_a+p)-(a_n+realism)
-    $kae_aff = 500 #(k_a+ego)-(k_n+realism)
+    $ann_aff = (a_a+p)-(a_n)
+    $kae_aff = (k_a+ego)-(k_n)
 
     "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
 
