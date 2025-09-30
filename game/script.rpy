@@ -1,12 +1,8 @@
-﻿# The script of the game goes in this file.
-
-# Declare characters used by this game. The color argument colorizes the
-# name of the character.
+﻿
 
 define a = Character(_("Annalisse"), color="#ec468a")
 define k = Character(_("Kael"), color="#a5c9cf")
 define Cashier = Character(("Cashier"))
-define pc = Character(color="#8760af")
 
 default preferences.text_cps = 45
 default preferences.afm_enable = False
@@ -15,6 +11,7 @@ init python:
     persistent.confessions = 0
     persistent.last_confess = []
     persistent.endings = []
+    persistent.tw = True
 
 define k_a =0
 define k_n = 0
@@ -31,6 +28,8 @@ define a_n =0
 define ann_aff =0
 define kae_aff =0
 
+default t = "something something"
+
 define pot_kettle= False
 define rejection = False
 define meet = False
@@ -44,15 +43,22 @@ default ann_aff = 0
 default kae_aff = 0
 
 
-
-
 label start:
 
-    "[persistent.last_confess]"
-    "[persistent.confessions]"
+    if persistent.tw:
+        "Trigger Warning: blood, gore, violence (specifically only bad endings so u should be fine)"
+        "do you wanna disable this warning for future playthroughs (AKA CLOSING THE GAME RESETS UR PROGRESS TWIN)"
+        menu:
+            "yESSIR":
+                $persistent.tw = False
+            "AWH HELL NAH":
+                $persistent.tw = True
+        "Also make sure to keep the game open while playing over and over to unlock certain endings !!"
+
+    "Endings Achieved: [persistent.last_confess]"
+    #"[persistent.confessions]"
 
     scene bg room
-
 
     "TODAY'S THE DAY, U ABSOLUTE LOSER !!"
     "UP AND AT EM !!"
@@ -76,7 +82,6 @@ label start:
             "Yes, yes, Shakespeare. We get it."
             "regardless... you look like yourself, and that's ogreish enough"
         
-
 label mirror_after:
 
     "Don't forget to scribble on your ID info"
@@ -99,7 +104,6 @@ label mirror_after:
         "no":
             jump mirror_after   
 
-        
 label campus:
     scene bg uni 
     with Dissolve(0.5)
@@ -229,7 +233,6 @@ label campus:
                 $realism+=2
                 $completion = 75
                 jump library
-
 label cafe:
     k "What was your topic again for class?"
     $topic = renpy.input("topic pending...")
@@ -504,8 +507,8 @@ label cafe:
             pc "...I'll stick around. Let's get to class."
             $realism+=2
             jump presentation
-    
 label cafe_ditch:
+    $a_a+=3
     $k_n+=5
     scene bg cafe inte
     with Dissolve(0.25)
@@ -520,7 +523,6 @@ label cafe_ditch:
     k "{size=-10}fucking interloper.{/size}"
     hide k odd
     jump library
-
 
 label library:
 
@@ -683,6 +685,7 @@ label library:
             $a_a+=4
             jump loiter
         else:
+            $a_n +=1
             show a partial mad
             a "Boo hoo. Fuck off. Get to your class."
     else:
@@ -711,7 +714,6 @@ label library:
         $pot_kettle = True
 
     jump presentation
-
 label loiter:
     
     "You stick with Annalisse before they let down their vigilance, slumped behind a book as they begin to softly snore."
@@ -752,7 +754,7 @@ label loiter:
         scene bg awake a mad
     a "You saw nothing."
     call aff_update
-    if ann_aff>=15:
+    if ann_aff>=5:
         menu:
             "You look cute.":
                 $a_a+=6
@@ -762,8 +764,6 @@ label loiter:
                 $a_a+=8
         if pot_kettle:
             $nn = "pot"
-        else:
-            $nn = pc
         a "Shut up, [nn]."
     "It's not a moment's hesitation before they begin grabbing their stuff to leave."
     scene bg library
@@ -803,7 +803,6 @@ label presentation:
     # Add your next story content here
     return
 
-
 label confession:
     "From what you remember, you started this day off hoping to confess..."
     "Those capturing eyes, that infectious smile, that charming voice... Obviously you were going to confess to..."
@@ -823,11 +822,12 @@ label confession:
         "NEITHER of them.":
             $realism+=25
             jump aro
-        "Full Completion" if len(persistent.endings) == 10:
+        "secret 5th option...." if len(persistent.endings) == 9:
             "Congrats ?? you must be a massive loser if you keep playing holy,"
             "Gold star for you!! You get to see the beta sprite of kael"
             show k beta
             $persistent.endings.append("locked in")
+            jump confession
 
 label route_a:
     "You couldn't help but be enamored with Annalisse. A harsh exterior and what YOU'RE sure is a soft interior. The apparent duality enraptures you."
@@ -844,7 +844,7 @@ label route_a:
             $p+=2
     call aff_update
     show a silhouette
-    if ann_aff >= 10:
+    if ann_aff >= 12:
         a "Sure. Whatever."
         if completion == 65 or completion == 90:
             a "how was ur presentation"
@@ -853,7 +853,7 @@ label route_a:
         a "Alright."
         $rejection = True
     hide a silhouette
-    if lecture and sneaky and kae_aff<=5:
+    if lecture and sneaky and kae_aff<=10:
         "In your peripheral you see that weird side to Kael again."
         "If you squint from across the room, he almost seems to be glaring at you..."
         "That's weird..."
@@ -887,14 +887,14 @@ label route_k:
             $p+=2
     call aff_update
     show k silhouette
-    if kae_aff>=10:
+    if kae_aff>=12:
         k "of course!! what do you need?"
         pc "just gotta talk with u, don't worry!"
     else:
         k "yeah sure!"
         $rejection = True
     hide k silhouette
-    if not lecture and ann_aff<=5:
+    if not lecture and ann_aff<=10:
         "You feel a pair of eyes trail over your figure as you're leaving the library. Let's just say they're not very comforting."
         "When you make your way out the door, you're suddenly swarmed!"
         "And you land flat on your face... after someone DEFINITELY TRIPS YOU."
@@ -919,7 +919,7 @@ label route_poly:
     "You message in a group."
     pc "Wanna hang out after school?"
     call aff_update
-    if kae_aff>=7 and ann_aff>=7:
+    if kae_aff>=12 and ann_aff>=12:
         show k silhouette
         show a silhouette
         k "sure"
@@ -936,7 +936,6 @@ label route_poly:
         jump aro
     else:
         jump poly_accept
-
 
 label a_accept:
     scene bg library
@@ -995,11 +994,13 @@ label a_accept:
     "Starkly different look."
     "Regardless, the two of you were on the bus together. Nothing new, but the bus takes a detour and immediately, you have no clue where the HELL you're headed."
     "Reminded once again why you hate public transport."
-    "You had looked around hurriedly and confused."
+    "You had looked around hurriedly and confused, chest heaving with every anxious breath."
+    "You really didn't wanna have to walk over. Or run. Or get kidnapped along the way."
+    "(Me too twin.)"
     "Annalisse caught your eye."
     show a past
-    a "Worried? The bus does this often, don't fret."
-    pc "Really? I think I'm a little more concerned... You take this route often?"
+    a "Are you panicking? The bus does this often, don't worry."
+    pc "Really? I think I'm a little more concerned now... You take this route often?"
     a "Yeah, virtually every damn day."
     show a past sad
     a "I'm A--"
@@ -1008,6 +1009,9 @@ label a_accept:
     a "I'm Annalisse. It's nice to meet you."
     "They outstretch their hand to you to which you firmly grab with both before shaking it wholeheartedly."
     pc "[pc]. Nice to meet you."
+    a "Where are you headed?"
+    pc "Just a friend's. I, er, owe them something. And it's time to pay up."
+    a "Hmm, can I ask you what you owe them?"
     "Enraptured in conversation with Ann, you absentmindedly miss the fact that YOU MISSED YOUR STATION."
     show a past sad
     "It's a few stations after that you ask Annalisse when it's your station to which you're told it passed a while back. Like a dumbass."
@@ -1038,7 +1042,7 @@ label a_accept:
     pc "So that begs the question... Do you want me too?"
     show a p_fluster
     a "I..."
-    if kae_aff <=5:
+    if kae_aff <=10:
         k "Not so fucking fast."
         show a p_fluster at left
         show k odd at right
@@ -1065,7 +1069,7 @@ label a_accept:
         pause.3
 
         k "Nice fucking try."
-        "Bad Ending 1: Jumped by Guard"
+        "Bad Ending 1: Jumped by Dog"
         if "Jumped by Dog" not in persistent.endings:
             $persistent.endings.append("Jumped by Dog")
         if "Jumped by Dog" not in persistent.last_confess:
@@ -1082,7 +1086,7 @@ label a_accept:
         pc "Is that..."
         "Your heart drops in your chest."
         a "Yes, dumbass. It's a yes."
-        scene annalisse ending
+        scene bg annalisse ending
         "Good Ending 1: Beauty and the Beast"
         if "Beauty and the Beast" not in persistent.endings:
             $persistent.endings.append("Beauty and the Beast")
@@ -1164,16 +1168,16 @@ label k_accept:
     show k odd
     pause.2
     show k nervous
-    k "Y-Yeah? You mean in class?"
+    k "Y- Yeah? You mean in class?"
     pc "No, no. I mean earlier than that."
     pause.2
     show k odd
     pause.2
     show k nervous
     k "You remember that...?"
-    "Oh...??? That's weird. They're characteristically nervous."
+    "Oh...??? That's weird. They're characteristically nervous. But what are they even nervous about?"
     pc "Yeah."
-    show k odd
+    show k delirious
     k "Hmm.."
     k "Go on."
     scene bg alley
@@ -1197,14 +1201,18 @@ label k_accept:
     pc "Huh."
     show k past mad
     k "Huh, my ass."
+    "Now, the bright pink was an assault on your eyes. Was that the only color they had in their wardrobe??"
+    "Jesus..."
     k "You're welcome."
     k "And what the hell are you doing out so late, huh?"
     pc "W-What is it to you...?"
     show k past
     k "Look, you almost died. Cut me some slack."
     "After pilfering through your wallet, they toss it back to you."
+    show k past snark
     k "Yeah, there's like nothing of substance here."
     "Out of condescendening (?) concern for you, Kael agrees to walk you home after the mortifying ordeal."
+    show k past
     "Obviously, it's the most awkward nighttime stroll you've ever taken, but gradually your yapper nature comes through."
     "The two of you get talking before Kael yanks your arm and scribbles a number on it."
     k "There. Call me if you ever need help."
@@ -1224,13 +1232,15 @@ label k_accept:
     show k neutral fluster
     pc "I wanted to tell you whatever you wanted to hear."
     pc "I wanted... I think I wanted to just talk with you."
+    "Loser behaviour really. Super cringe."
+    "Especially you camping outside that alleyway for a couple days."
     show k nervous
     k "Really? Talk to... {i} that {/i} Kael?"
     pc "Yeah. And you're different now. And that's not bad."
     pc "Not at all."
     pc "I like you the same, want you the same."
     pc "But do you... er... want me too?"
-    if ann_aff <= 5:
+    if ann_aff <= 10:
         a "Wow."
         show k nervous at left
         show a partial mad at right
@@ -1284,6 +1294,9 @@ label k_accept:
                 k "HUH???"
                 k "Is... is that a yes?"
                 pc "It's always been?!"
+                k "BUT I'M A HORRIBLE PERSON-"
+                pc "AND ???"
+                scene bg kael ending
                 "Good Ending 2: Red Riding Hood and the Wolf; You're Red."
                 if "Red Riding Hood" not in persistent.endings:
                     $persistent.endings.append("Red Riding Hood")
@@ -1297,24 +1310,24 @@ label k_accept:
                 scene bg k punch1
                 pause.25
                 scene bg k blink1
-                "Your nose burns."
+                pc "What the--"
                 pause.3
                 scene bg k punch2
                 pause.25
                 scene bg k blink2
-                "Your face itches."
+                k "Sorry."
                 pause.3
                 scene bg k punch3
                 pause.25
                 scene bg k blink3
-                "Your skin burns."
+                k "Well, not really."
                 pause.3
                 scene bg k punch4
                 pause.25
                 scene bg k blink4
-                "Your heart stops."
+                k "You're too close to everything."
                 pause.3
-                k "I can't risk getting caught."
+                k "And I can't risk getting caught."
                 "Bad Ending 4: Through Life or Death"
                 if "Life and Death" not in persistent.last_confess:
                     $persistent.last_confess.append("Life and Death")
@@ -1359,7 +1372,7 @@ label poly_accept:
     scene bg uni
     with Dissolve(0.5)
     pause.25
-    "Well this is most definitely going to be really awkward."
+    "Well, this is most definitely going to be really awkward."
     "Firstly, you have to confess to two gorgeous people."
     "Then propose a polyamorous relationship. With these two people."
     "Who for all you know, could like each other better. Ohhh, it's so over."
@@ -1376,6 +1389,7 @@ label poly_accept:
     hide a neutral
     hide k neutral
     show a snark
+    with Dissolve(.25)
     a "Yo."
     "AHRGHHGHG THERE SHE IS !! THGE ONE THE ONLY ANNALISSE !!!"
     show a partial mad
@@ -1391,14 +1405,15 @@ label poly_accept:
     show a neutral at left
     show k nervous at right
     k "I'm not late or anything, am I?"
-    "OH MY GOD HE'S SUCH A [[CUTIE PATOOTIE]] I LOVE HIM SM MY SHAYLA...."
+    "OH MY GOD HE'S SUCH A [[CUTIE PATOOTIE] I LOVE HIM SM MY SHAYLA...."
     "*cough cough* Anyways."
     pc "So. There's a reason I brought you both here."
     pc "I, uh, I've been thinking about us. Like, all three of us."
     show a snark
-    a "Wow. [pc]? [nn]? Thinking? Unheard of."
+    a "Wow. [pc]? Our [nn]? Thinking? Unheard of."
     pc "Let me finish, goddamn..."
     "You can hear Annalisse snickering as Kael nudges them to shut up."
+    show a neutral
     pc "As I was saying. I care about both of you, like a lot. Like romantically."
     show k shock
     show a p_fluster
@@ -1418,17 +1433,18 @@ label poly_accept:
     "So... Is it hot out here? Or is that just you???"
     show a snark fluster
     "Annalisse elbows Kael harshly to which they let out a whine."
-    show k delirious
+    show k nervous
     k "What the--"
     show a fluster
     a "Are you gonna tell them?"
     show k shock
-    pause.1
+    pause.2
     show k shock fluster
     pause.2
     show k snark
     k "Of course. Why wouldn't I?"
     "Annalisse rolls their eyes at the sharp turn in conversation."
+    show a snark
     a "Get to it."
     show k odd fluster
     k "We -- and I mean WE -- like you too [pc]."
@@ -1437,7 +1453,10 @@ label poly_accept:
     k "And we also remember those incidents."
     show a snark
     a "What do you think we talk about on our own?"
+    show k shock
+    k "Annalisse, you can't tell--"
     pc "WHAT THE FUCK--"
+    scene bg poly ending
     "Good Ending 3: Bag the Baddies"
     if "Bag the Baddies" not in persistent.last_confess:
         $persistent.last_confess.append("Bag the Baddies")
@@ -1445,17 +1464,6 @@ label poly_accept:
         $persistent.endings.append("Bag the Baddies")
     
     return
-
-    
-
-label poly_reject:
-    scene bg uni
-    with Dissolve(0.5)
-    pause.25
-    "kael not peak"
-    return
-
-
 label aro:
     scene bg aro
     with Dissolve(0.5)
@@ -1482,10 +1490,7 @@ label aro:
 
 label aff_update:
 
-
     $ann_aff = (a_a+p)-(a_n)
     $kae_aff = (k_a+ego)-(k_n)
-
-    "annalisse affection = [a_a], kael affection = [k_a], annalisse hate = [a_n], kael hate = [k_n], ego = [ego], poet = [p], realism = [realism], a_aff_total = [ann_aff]"
 
     return
